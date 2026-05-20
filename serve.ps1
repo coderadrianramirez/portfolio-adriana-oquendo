@@ -1,4 +1,4 @@
-# Simple static file server for portfolio.html
+# Static file server for portfolio — PowerShell/.NET HttpListener
 param([int]$Port = 3000)
 
 $rootPath = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -11,7 +11,7 @@ Write-Output "Press Ctrl+C to stop."
 
 $mimeTypes = @{
   ".html" = "text/html; charset=utf-8"
-  ".css"  = "text/css"
+  ".css"  = "application/javascript"
   ".js"   = "application/javascript"
   ".json" = "application/json"
   ".png"  = "image/png"
@@ -31,23 +31,33 @@ try {
 
     $filePath = Join-Path $rootPath ($localPath.TrimStart('/').Replace('/', '\'))
 
-    if (Test-Path $filePath -PathType Leaf) {
-      $ext     = [System.IO.Path]::GetExtension($filePath).ToLower()
-      $mime    = if ($mimeTypes[$ext]) { $mimeTypes[$ext] } else { "application/octet-stream" }
-      $content = [System.IO.File]::ReadAllBytes($filePath)
-      $response.StatusCode      = 200
-      $response.ContentType     = $mime
-      $response.ContentLength64 = $content.Length
-      $response.OutputStream.Write($content, 0, $content.Length)
-    } else {
-      $body    = [System.Text.Encoding]::UTF8.GetBytes("404 - Not Found")
-      $response.StatusCode      = 404
-      $response.ContentType     = "text/plain"
-      $response.ContentLength64 = $body.Length
-      $response.OutputStream.Write($body, 0, $body.Length)
-    }
+    try {
+      if (Test-Path $filePath -PathType Leaf) {
+        $ext  = [System.IO.Path]::GetExtension($filePath).ToLower()
+        $mime = if ($mimeTypes[$ext]) { $mimeTypes[$ext] } else { "application/octet-stream" }
 
-    $response.OutputStream.Close()
+        # Use file stream + exact OS file size (long) to avoid ContentLength64 mismatch
+        $fileInfo = New-Object System.IO.FileInfo($filePath)
+        $response.StatusCode      = 200
+        $response.ContentType     = $mime
+        $response.ContentLength64 = $fileInfo.Length
+
+        $fileStream = [System.IO.File]::OpenRead($filePath)
+        try { $fileStream.CopyTo($response.OutputStream) }
+        finally { $fileStream.Dispose() }
+
+      } else {
+        $body = [System.Text.Encoding]::UTF8.GetBytes("404 - Not Found")
+        $response.StatusCode      = 404
+        $response.ContentType     = "text/plain; charset=utf-8"
+        $response.ContentLength64 = [long]$body.Length
+        $response.OutputStream.Write($body, 0, $body.Length)
+      }
+    } catch {
+      # Ignore broken pipe / client disconnected errors
+    } finally {
+      try { $response.OutputStream.Close() } catch {}
+    }
   }
 } finally {
   $listener.Stop()
