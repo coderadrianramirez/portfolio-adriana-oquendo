@@ -201,7 +201,7 @@ const Navbar = ({ dark, setDark, view, setView, goTo }) => {
         {/* Logo */}
         <button onClick={() => { setView('home'); window.scrollTo({ top:0, behavior:'smooth' }); }}
           className={`font-sans text-lg font-semibold tracking-tight transition-colors ${dark ? 'text-white hover:text-violet-400' : 'text-black hover:text-violet-600'}`}>
-          adriana<span className="text-violet-500">.</span>
+          adriana oquendo<span className="text-violet-500">.</span>
         </button>
 
         {/* Controls */}
@@ -354,20 +354,14 @@ const About = ({ dark }) => {
         {/* Visual */}
         <div className="relative aspect-square max-w-[480px] mx-auto lg:mx-0 select-none">
           {/* Outer ring */}
-          <div className={`absolute inset-0 rounded-3xl border ${dark ? 'border-white/8' : 'border-black/8'}`}/>
-          {/* Main gradient block */}
-          <div className="absolute inset-6 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 overflow-hidden">
-            <div className="absolute inset-0 opacity-20" style={{
-              backgroundImage:'repeating-linear-gradient(45deg, rgba(255,255,255,0.15) 0px, rgba(255,255,255,0.15) 1px, transparent 1px, transparent 22px)'
-            }}/>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display text-9xl font-bold text-white/10">AR</span>
-            </div>
-            {/* Inner decorative elements */}
-            <div className="absolute bottom-6 left-6 right-6 h-0.5 bg-white/10 rounded"/>
-            <div className="absolute top-6 left-6 right-6 h-0.5 bg-white/10 rounded"/>
-            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-white/10 rounded"/>
-            <div className="absolute right-6 top-6 bottom-6 w-0.5 bg-white/10 rounded"/>
+          <div className={`absolute inset-0 rounded-3xl border ${dark ? 'border-violet-500/20' : 'border-violet-500/20'}`}/>
+          {/* Profile photo */}
+          <div className="absolute inset-6 rounded-2xl overflow-hidden">
+            <img
+              src="adriana.png"
+              alt="Adriana Oquendo"
+              className="w-full h-full object-cover object-top"
+            />
           </div>
           {/* Floating badge top-right */}
           <div className={`absolute -top-5 -right-5 px-5 py-3 rounded-2xl border shadow-2xl ${
@@ -693,7 +687,7 @@ const Footer = ({ dark }) => (
   <footer className={`py-10 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
       <div className={`font-sans text-lg font-semibold ${dark ? 'text-white' : 'text-black'}`}>
-        adriana<span className="text-violet-500">.</span>
+        adriana oquendo<span className="text-violet-500">.</span>
       </div>
       <div className={`text-xs ${dark ? 'text-white/30' : 'text-black/30'}`}>
         © 2026 Adriana Oquendo — Diseñado y desarrollado con precisión
