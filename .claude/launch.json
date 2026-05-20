@@ -2,10 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "Portfolio Dev Server",
+      "name": "Adriana Oquendo — Portfolio",
       "runtimeExecutable": "powershell",
-      "runtimeArgs": ["-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "serve.ps1"],
+      "runtimeArgs": ["-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "adriana-oquendo-portfolio/serve.ps1"],
       "port": 3000
+    },
+    {
+      "name": "Nano Moreno — Portfolio",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "nano-moreno-portfolio/serve.ps1"],
+      "port": 5174
     }
   ]
 }
