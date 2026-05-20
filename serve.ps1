@@ -27,7 +27,7 @@ try {
     $response = $context.Response
 
     $localPath = $request.Url.LocalPath
-    if ($localPath -eq "/" -or $localPath -eq "") { $localPath = "/portfolio.html" }
+    if ($localPath -eq "/" -or $localPath -eq "") { $localPath = "/index.html" }
 
     $filePath = Join-Path $rootPath ($localPath.TrimStart('/').Replace('/', '\'))
 

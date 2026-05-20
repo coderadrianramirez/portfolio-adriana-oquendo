@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-adriana-oquendo",
+  "version": "1.0.0",
+  "description": "Portafolio profesional — Adriana Oquendo | Diseño & Desarrollo Web",
+  "scripts": {
+    "build": "echo 'Static site — no build step required'",
+    "start": "powershell -ExecutionPolicy Bypass -File serve.ps1"
+  },
+  "keywords": ["portfolio", "diseño", "desarrollo", "react", "tailwind", "frontend"],
+  "author": "Adriana Oquendo",
+  "license": "MIT"
+}
