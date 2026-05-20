@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adriana Oquendo — Diseño & Desarrollo Web</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    @keyframes scrollLeft {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    .scroll-track { animation: scrollLeft 28s linear infinite; }
+    .scroll-track:hover { animation-play-state: paused; }
+
+    .anim-fade-up   { animation: fadeInUp 0.9s ease both; }
+    .anim-fade-up-1 { animation: fadeInUp 0.9s ease 0.15s both; }
+    .anim-fade-up-2 { animation: fadeInUp 0.9s ease 0.30s both; }
+    .anim-fade-up-3 { animation: fadeInUp 0.9s ease 0.45s both; }
+
+    .spin-slow { animation: spinSlow 20s linear infinite; }
+    .dot-blink { animation: blink 1.8s ease-in-out infinite; }
+
+    .project-card .project-img  { transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .project-card:hover .project-img { transform: scale(1.06); }
+    .project-card .project-overlay { opacity: 0; transition: opacity 0.35s ease; }
+    .project-card:hover .project-overlay { opacity: 1; }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #8B5CF6; border-radius: 2px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          display: ['Syne', 'sans-serif'],
+        },
+      }
+    }
+  };
+</script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ─────────────────────────────────────────
+   ICON SYSTEM
+───────────────────────────────────────── */
+const PATHS = {
+  menu:         <path d="M4 6h16M4 12h16M4 18h16"/>,
+  x:            <><path d="M18 6 6 18"/><path d="m6 6 12 12"/></>,
+  moon:         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>,
+  sun:          <><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></>,
+  arrowRight:   <><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>,
+  arrowLeft:    <><path d="m19 12H5"/><path d="m12 19-7-7 7-7"/></>,
+  mail:         <><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></>,
+  mapPin:       <><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></>,
+  github:       <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S9 16.23 9 17v4M9 18c-4.51 2-5-2-7-2"/>,
+  linkedin:     <><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></>,
+  twitter:      <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>,
+  code:         <><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></>,
+  palette:      <><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></>,
+  zap:          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>,
+  layers:       <><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></>,
+  monitor:      <><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8M12 17v4"/></>,
+  smartphone:   <><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></>,
+  send:         <><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></>,
+  check:        <path d="M20 6 9 17 4 12"/>,
+  eye:          <><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></>,
+  globe:        <><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></>,
+  externalLink: <><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></>,
+};
+
+const Icon = ({ name, size = 20, className = '' }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size}
+    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"
+    className={className}>
+    {PATHS[name]}
+  </svg>
+);
+
+const StarFilled = ({ size = 14, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"/>
+  </svg>
+);
+
+/* ─────────────────────────────────────────
+   DATA
+───────────────────────────────────────── */
+const LOGOS = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Figma', 'Node.js', 'GraphQL', 'PostgreSQL', 'Framer Motion', 'Vercel', 'Stripe', 'AWS'];
+
+const FEATURED = [
+  { id:1, title:'Nexus Dashboard', desc:'Plataforma de analytics empresarial con visualizaciones en tiempo real y alertas inteligentes.', tags:['React','Tailwind','D3.js'], category:'Desarrollo', gradient:'from-violet-600 via-purple-600 to-indigo-700', accent:'#8B5CF6' },
+  { id:2, title:'Aura Branding', desc:'Identidad visual completa para startup de bienestar premium. De naming a sistema de diseño.', tags:['Figma','Branding','UI/UX'], category:'Diseño', gradient:'from-rose-500 via-pink-500 to-fuchsia-600', accent:'#F43F5E' },
+  { id:3, title:'Orbit E-commerce', desc:'Tienda online con experiencia de compra fluida, carrito optimizado y checkout sin fricción.', tags:['Next.js','Node.js','Stripe'], category:'Desarrollo', gradient:'from-cyan-500 via-sky-500 to-blue-600', accent:'#06B6D4' },
+];
+
+const ALL_PROJECTS = [
+  ...FEATURED,
+  { id:4, title:'Lumina App', desc:'Aplicación móvil para gestión de hábitos con diseño minimalista y notificaciones inteligentes.', tags:['React Native','Figma','Expo'], category:'Diseño', gradient:'from-amber-400 via-orange-400 to-red-500', accent:'#F59E0B' },
+  { id:5, title:'Helix CMS', desc:'Sistema de gestión de contenido headless con API REST, GraphQL y panel de administración.', tags:['Node.js','GraphQL','PostgreSQL'], category:'Desarrollo', gradient:'from-emerald-500 via-teal-500 to-cyan-600', accent:'#10B981' },
+  { id:6, title:'Flux Agency Site', desc:'Sitio web para agencia creativa con animaciones de scroll paralax y transiciones cinematográficas.', tags:['Next.js','GSAP','Tailwind'], category:'Desarrollo', gradient:'from-purple-500 via-violet-600 to-indigo-700', accent:'#A855F7' },
+  { id:7, title:'Vanta Design System', desc:'Sistema de diseño con 200+ componentes documentados, tokens semánticos y Storybook configurado.', tags:['Figma','Tokens','Storybook'], category:'Diseño', gradient:'from-slate-500 via-slate-600 to-slate-800', accent:'#64748B' },
+  { id:8, title:'Prism Analytics SaaS', desc:'Plataforma SaaS de analítica web con dashboard personalizable, filtros avanzados y exportaciones.', tags:['React','TypeScript','WebSockets'], category:'Desarrollo', gradient:'from-fuchsia-500 via-purple-500 to-violet-600', accent:'#D946EF' },
+  { id:9, title:'Echo Social', desc:'Red social de nicho con feed algorítmico, mensajería en tiempo real y experiencia inmersiva.', tags:['Next.js','Prisma','Figma'], category:'Diseño', gradient:'from-sky-400 via-cyan-500 to-teal-600', accent:'#0EA5E9' },
+];
+
+const SERVICES = [
+  { icon:'palette', title:'Diseño UI/UX Premium', desc:'Interfaces que convierten visitantes en usuarios fieles. De wireframes hasta prototipos en Figma listos para desarrollo.', tags:['Figma','Prototipos','Research','Usabilidad'] },
+  { icon:'code', title:'Desarrollo Frontend', desc:'Código limpio, performante y accesible con React y Next.js. Componentes reutilizables y animaciones que elevan la UX.', tags:['React','Next.js','TypeScript','GSAP'] },
+  { icon:'layers', title:'Design Systems', desc:'Sistemas de diseño escalables con tokens semánticos, componentes documentados y Storybook para equipos ágiles.', tags:['Tokens','Storybook','Figma','Docs'] },
+  { icon:'zap', title:'Optimización & SEO', desc:'Core Web Vitals en verde, carga sub-segundo y estrategias técnicas de SEO que posicionan y convierten.', tags:['Lighthouse','Core Web Vitals','SEO'] },
+  { icon:'monitor', title:'Web Apps Full Stack', desc:'Aplicaciones completas desde diseño hasta deploy. Backend con Node.js, bases de datos robustas y autenticación segura.', tags:['Node.js','PostgreSQL','Auth','AWS'] },
+  { icon:'smartphone', title:'Apps Móviles', desc:'Experiencias nativas cross-platform con React Native. Diseño impecable, rendimiento nativo y una sola base de código.', tags:['React Native','Expo','Mobile UI'] },
+];
+
+const TESTIMONIALS = [
+  { name:'Valentina Torres', role:'CEO, Startup Nexus', text:'Transformó por completo nuestra visión en un producto digital que superó todas las expectativas. La combinación de diseño y código es verdaderamente excepcional. No volvería a trabajar con nadie más.', avatar:'VT', accent:'#8B5CF6' },
+  { name:'Carlos Mendoza', role:'CTO, Aura Health', text:'El nivel de detalle en la implementación y la velocidad de entrega son incomparables. Cada pixel está donde debe estar. Entregó en tiempo récord sin sacrificar ni un milímetro de calidad.', avatar:'CM', accent:'#06B6D4' },
+  { name:'Sofía Restrepo', role:'Directora Creativa, Flux', text:'Finalmente un desarrollador que de verdad entiende diseño. El resultado final fue exactamente lo que imaginé, pero ejecutado de forma aún más impecable de lo que esperaba. Increíble.', avatar:'SR', accent:'#F43F5E' },
+];
+
+/* ─────────────────────────────────────────
+   NAVBAR
+───────────────────────────────────────── */
+const Navbar = ({ dark, setDark, view, setView, goTo }) => {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  const links = [
+    { label:'Sobre mí', id:'about' },
+    { label:'Servicios', id:'services' },
+    { label:'Trabajos', id:'works' },
+  ];
+
+  const base = `fixed top-0 left-0 right-0 z-50 transition-all duration-500`;
+  const bg = scrolled
+    ? dark ? 'bg-black/85 backdrop-blur-xl border-b border-white/[0.08]'
+           : 'bg-white/85 backdrop-blur-xl border-b border-black/[0.08]'
+    : 'bg-transparent';
+
+  return (
+    <nav className={`${base} ${bg}`}>
+      {/* Links centrados absolutamente respecto al viewport */}
+      <div className="absolute inset-0 h-[66px] hidden md:flex items-center justify-center pointer-events-none">
+        <div className="flex items-center gap-8 pointer-events-auto">
+          {view === 'home' ? links.map(l => (
+            <button key={l.id} onClick={() => goTo(l.id)}
+              className={`text-sm font-medium transition-colors hover:text-violet-500 ${dark ? 'text-white/60' : 'text-black/55'}`}>
+              {l.label}
+            </button>
+          )) : (
+            <button onClick={() => setView('home')}
+              className={`flex items-center gap-2 text-sm font-medium transition-all hover:text-violet-500 hover:-translate-x-0.5 ${dark ? 'text-white/60' : 'text-black/55'}`}>
+              <Icon name="arrowLeft" size={15}/> Volver al inicio
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Logo + Controls en flex justify-between */}
+      <div className="relative max-w-7xl mx-auto px-6 h-[66px] flex items-center justify-between">
+        {/* Logo */}
+        <button onClick={() => { setView('home'); window.scrollTo({ top:0, behavior:'smooth' }); }}
+          className={`font-sans text-lg font-semibold tracking-tight transition-colors ${dark ? 'text-white hover:text-violet-400' : 'text-black hover:text-violet-600'}`}>
+          adriana<span className="text-violet-500">.</span>
+        </button>
+
+        {/* Controls */}
+        <div className="flex items-center gap-2.5">
+          <button onClick={() => setDark(!dark)}
+            className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-300 ${
+              dark ? 'border-white/15 text-white/60 hover:text-white hover:border-white/30 hover:bg-white/8'
+                   : 'border-black/15 text-black/55 hover:text-black hover:border-black/30 hover:bg-black/5'}`}>
+            <Icon name={dark ? 'sun' : 'moon'} size={15}/>
+          </button>
+
+          <button onClick={() => { if (view !== 'home') { setView('home'); setTimeout(() => goTo('contact'), 80); } else goTo('contact'); }}
+            className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold bg-violet-600 text-white hover:bg-violet-500 transition-all hover:shadow-lg hover:shadow-violet-500/30">
+            Hablemos <Icon name="arrowRight" size={14}/>
+          </button>
+
+          <button onClick={() => setOpen(!open)} className={`md:hidden w-9 h-9 rounded-full flex items-center justify-center ${dark ? 'text-white' : 'text-black'}`}>
+            <Icon name={open ? 'x' : 'menu'} size={18}/>
+          </button>
+        </div>
+      </div>
+
+      {open && (
+        <div className={`md:hidden border-t px-6 py-5 flex flex-col gap-4 ${dark ? 'bg-black/95 border-white/8' : 'bg-white/95 border-black/8'}`}>
+          {view === 'home' ? links.map(l => (
+            <button key={l.id} onClick={() => { goTo(l.id); setOpen(false); }}
+              className={`text-left text-sm font-medium hover:text-violet-500 ${dark ? 'text-white/60' : 'text-black/55'}`}>
+              {l.label}
+            </button>
+          )) : (
+            <button onClick={() => { setView('home'); setOpen(false); }}
+              className={`flex items-center gap-2 text-sm font-medium hover:text-violet-500 ${dark ? 'text-white/60' : 'text-black/55'}`}>
+              <Icon name="arrowLeft" size={15}/> Volver al inicio
+            </button>
+          )}
+          <button onClick={() => { goTo('contact'); setOpen(false); }}
+            className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-violet-600 text-white">
+            Hablemos <Icon name="arrowRight" size={14}/>
+          </button>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+const Hero = ({ dark, setView, goTo }) => (
+  <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 pt-[66px]">
+    {/* Grid bg */}
+    <div className="absolute inset-0 pointer-events-none" style={{
+      backgroundImage: `linear-gradient(${dark?'rgba(255,255,255,0.03)':'rgba(0,0,0,0.04)'} 1px, transparent 1px),
+                        linear-gradient(90deg, ${dark?'rgba(255,255,255,0.03)':'rgba(0,0,0,0.04)'} 1px, transparent 1px)`,
+      backgroundSize: '64px 64px'
+    }}/>
+    {/* Glow orb */}
+    <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none"
+      style={{ background:'radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 65%)' }}/>
+    {/* Decorative dots */}
+    <div className="absolute top-28 right-24 w-2.5 h-2.5 rounded-full bg-violet-500/70"/>
+    <div className="absolute top-1/2 left-12 w-2 h-2 rounded-full bg-cyan-400/60"/>
+    <div className="absolute bottom-36 right-1/3 w-1.5 h-1.5 rounded-full bg-violet-400/50"/>
+    <div className="absolute bottom-24 left-1/4 w-3 h-3 rounded-full border border-violet-500/40"/>
+
+    <div className="relative max-w-6xl w-full mx-auto text-center">
+      {/* Availability badge */}
+      <div className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-xs font-semibold mb-7 border anim-fade-up ${
+        dark ? 'border-violet-500/25 bg-violet-500/10 text-violet-300' : 'border-violet-500/25 bg-violet-50 text-violet-700'}`}>
+        <span className="w-1.5 h-1.5 rounded-full bg-green-400 dot-blink"/>
+        Disponible para nuevos proyectos — 2026
+      </div>
+
+      {/* Title */}
+      <h1 className={`font-display font-bold leading-none tracking-tighter mb-6 anim-fade-up-1 ${dark ? 'text-white' : 'text-black'}`}
+        style={{ fontSize:'clamp(2.6rem,7.2vw,6.5rem)' }}>
+        <span className="block">DISEÑO</span>
+        <span className="block bg-gradient-to-r from-violet-500 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          &amp; CÓDIGO
+        </span>
+        <span className="block">SIN LÍMITES</span>
+      </h1>
+
+      {/* Subtitle */}
+      <p className={`text-base md:text-lg max-w-xl mx-auto mb-9 leading-relaxed anim-fade-up-2 ${dark ? 'text-white/55' : 'text-black/55'}`}>
+        Fusiono dirección de arte premium con ingeniería frontend sólida para crear experiencias digitales que generan resultados reales y memorables.
+      </p>
+
+      {/* CTAs */}
+      <div className="flex flex-wrap items-center justify-center gap-4 mb-14 anim-fade-up-3">
+        <button onClick={() => goTo('works')}
+          className="group flex items-center gap-3 px-9 py-4 rounded-full font-semibold text-white bg-violet-600 hover:bg-violet-500 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/40 hover:-translate-y-0.5">
+          Ver Proyectos
+          <Icon name="arrowRight" size={18} className="group-hover:translate-x-1 transition-transform"/>
+        </button>
+        <button onClick={() => goTo('contact')}
+          className={`group flex items-center gap-3 px-9 py-4 rounded-full font-semibold border transition-all duration-300 hover:-translate-y-0.5 ${
+            dark ? 'border-white/20 text-white hover:bg-white/8 hover:border-white/35'
+                 : 'border-black/20 text-black hover:bg-black/5 hover:border-black/35'}`}>
+          Hablemos
+          <Icon name="mail" size={18} className="group-hover:scale-110 transition-transform"/>
+        </button>
+      </div>
+
+      {/* Stats */}
+      <div className={`border-t pt-8 flex flex-wrap justify-center gap-10 anim-fade-up-3 ${dark ? 'border-white/10' : 'border-black/10'}`}>
+        {[['5+','Años de experiencia'],['80+','Proyectos entregados'],['98%','Satisfacción clientes']].map(([n,l]) => (
+          <div key={l} className="text-center">
+            <div className={`font-display text-4xl font-bold mb-1 ${dark ? 'text-white' : 'text-black'}`}>{n}</div>
+            <div className={`text-sm ${dark ? 'text-white/40' : 'text-black/40'}`}>{l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+/* ─────────────────────────────────────────
+   LOGO CAROUSEL
+───────────────────────────────────────── */
+const LogoCarousel = ({ dark }) => {
+  const doubled = [...LOGOS, ...LOGOS];
+  return (
+    <section className={`py-12 border-y overflow-hidden ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
+      <div className="relative">
+        <div className="flex gap-16 items-center scroll-track" style={{ width:'max-content' }}>
+          {doubled.map((logo, i) => (
+            <span key={i} className={`font-display font-bold text-xs tracking-[0.2em] uppercase whitespace-nowrap transition-colors cursor-default ${
+              dark ? 'text-white/20 hover:text-violet-400' : 'text-black/25 hover:text-violet-600'}`}>
+              {logo}
+            </span>
+          ))}
+        </div>
+        {/* Fade masks */}
+        <div className={`absolute inset-y-0 left-0 w-32 pointer-events-none ${dark ? 'bg-gradient-to-r from-black' : 'bg-gradient-to-r from-white'}`}/>
+        <div className={`absolute inset-y-0 right-0 w-32 pointer-events-none ${dark ? 'bg-gradient-to-l from-black' : 'bg-gradient-to-l from-white'}`}/>
+      </div>
+    </section>
+  );
+};
+
+/* ─────────────────────────────────────────
+   ABOUT
+───────────────────────────────────────── */
+const About = ({ dark }) => {
+  const skills = ['React','Next.js','TypeScript','Tailwind CSS','Figma','Node.js','GraphQL','UI/UX Design','Design Systems','GSAP','PostgreSQL','Framer Motion'];
+  return (
+    <section id="about" className="py-32 px-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        {/* Visual */}
+        <div className="relative aspect-square max-w-[480px] mx-auto lg:mx-0 select-none">
+          {/* Outer ring */}
+          <div className={`absolute inset-0 rounded-3xl border ${dark ? 'border-white/8' : 'border-black/8'}`}/>
+          {/* Main gradient block */}
+          <div className="absolute inset-6 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-700 overflow-hidden">
+            <div className="absolute inset-0 opacity-20" style={{
+              backgroundImage:'repeating-linear-gradient(45deg, rgba(255,255,255,0.15) 0px, rgba(255,255,255,0.15) 1px, transparent 1px, transparent 22px)'
+            }}/>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-display text-9xl font-bold text-white/10">AR</span>
+            </div>
+            {/* Inner decorative elements */}
+            <div className="absolute bottom-6 left-6 right-6 h-0.5 bg-white/10 rounded"/>
+            <div className="absolute top-6 left-6 right-6 h-0.5 bg-white/10 rounded"/>
+            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-white/10 rounded"/>
+            <div className="absolute right-6 top-6 bottom-6 w-0.5 bg-white/10 rounded"/>
+          </div>
+          {/* Floating badge top-right */}
+          <div className={`absolute -top-5 -right-5 px-5 py-3 rounded-2xl border shadow-2xl ${
+            dark ? 'bg-black border-white/10 text-white' : 'bg-white border-black/8 text-black'}`}>
+            <span className="font-display font-bold text-xl text-violet-500">5+</span>
+            <span className={`text-xs ml-1.5 ${dark ? 'text-white/50' : 'text-black/50'}`}>años</span>
+          </div>
+          {/* Floating badge bottom-left */}
+          <div className={`absolute -bottom-5 -left-5 px-5 py-3 rounded-2xl border shadow-2xl ${
+            dark ? 'bg-black border-white/10 text-white' : 'bg-white border-black/8 text-black'}`}>
+            <span className="font-display font-bold text-xl text-cyan-500">80+</span>
+            <span className={`text-xs ml-1.5 ${dark ? 'text-white/50' : 'text-black/50'}`}>proyectos</span>
+          </div>
+          {/* Accent dot */}
+          <div className="absolute top-1/2 -right-2.5 w-5 h-5 rounded-full bg-violet-500 shadow-lg shadow-violet-500/60"/>
+        </div>
+
+        {/* Bio */}
+        <div>
+          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Sobre mí</span>
+          <h2 className={`font-display text-5xl font-bold tracking-tight leading-none mb-8 ${dark ? 'text-white' : 'text-black'}`}>
+            Donde el arte<br/>
+            <span className="text-violet-500">se convierte</span><br/>
+            en código.
+          </h2>
+          <p className={`text-base leading-relaxed mb-5 ${dark ? 'text-white/55' : 'text-black/55'}`}>
+            Soy Adriana Oquendo, diseñadora y desarrolladora frontend con más de 5 años creando productos digitales que equilibran estética impecable con funcionalidad técnica sólida.
+          </p>
+          <p className={`text-base leading-relaxed mb-10 ${dark ? 'text-white/55' : 'text-black/55'}`}>
+            Mi enfoque combina pensamiento de diseño estratégico, arquitectura de componentes escalable y animaciones fluidas para entregar experiencias que los usuarios recuerdan. No solo construyo interfaces: resuelvo problemas de negocio con diseño intencional.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {skills.map(s => (
+              <span key={s} className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-default hover:border-violet-500/50 hover:text-violet-500 ${
+                dark ? 'border-white/12 text-white/60 bg-white/[0.03]' : 'border-black/12 text-black/60 bg-black/[0.03]'}`}>
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─────────────────────────────────────────
+   SERVICES
+───────────────────────────────────────── */
+const Services = ({ dark }) => (
+  <section id="services" className={`py-32 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
+    <div className="max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+        <div>
+          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Servicios</span>
+          <h2 className={`font-display text-5xl font-bold tracking-tight leading-none ${dark ? 'text-white' : 'text-black'}`}>
+            Lo que puedo<br/>hacer por ti.
+          </h2>
+        </div>
+        <div className="flex items-end">
+          <p className={`text-base leading-relaxed ${dark ? 'text-white/45' : 'text-black/45'}`}>
+            Cada servicio está diseñado para entregar resultados medibles, no solo estética. La calidad y el detalle no son opcionales.
+          </p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {SERVICES.map((s, i) => (
+          <div key={i} className={`group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-1.5 cursor-default ${
+            dark ? 'border-white/[0.08] hover:border-violet-500/30 hover:bg-violet-500/[0.04]'
+                 : 'border-black/[0.08] hover:border-violet-500/30 hover:bg-violet-50/60'}`}>
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-7 transition-all duration-300 group-hover:bg-violet-600 group-hover:text-white ${
+              dark ? 'bg-white/[0.05] text-white/60' : 'bg-black/[0.04] text-black/60'}`}>
+              <Icon name={s.icon} size={20}/>
+            </div>
+            <h3 className={`font-display font-bold text-lg mb-3 transition-colors group-hover:text-violet-500 ${dark ? 'text-white' : 'text-black'}`}>
+              {s.title}
+            </h3>
+            <p className={`text-sm leading-relaxed mb-6 ${dark ? 'text-white/45' : 'text-black/45'}`}>{s.desc}</p>
+            <div className="flex flex-wrap gap-1.5">
+              {s.tags.map(t => (
+                <span key={t} className={`px-2 py-0.5 rounded text-xs font-medium ${dark ? 'bg-white/[0.05] text-white/35' : 'bg-black/[0.04] text-black/35'}`}>{t}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+/* ─────────────────────────────────────────
+   PROJECT CARD
+───────────────────────────────────────── */
+const ProjectCard = ({ p, dark }) => {
+  const [hov, setHov] = useState(false);
+  return (
+    <div className={`project-card group relative rounded-2xl overflow-hidden border transition-all duration-500 hover:-translate-y-2 cursor-pointer ${
+      dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}
+      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{ boxShadow: hov ? `0 32px 64px ${p.accent}22` : 'none' }}>
+      {/* Image / mockup */}
+      <div className="relative h-56 overflow-hidden">
+        <div className={`project-img absolute inset-0 bg-gradient-to-br ${p.gradient}`}/>
+        {/* Subtle grid */}
+        <div className="absolute inset-0 opacity-[0.15]" style={{
+          backgroundImage:'repeating-linear-gradient(0deg, rgba(255,255,255,0.3) 0, rgba(255,255,255,0.3) 1px, transparent 1px, transparent 32px), repeating-linear-gradient(90deg, rgba(255,255,255,0.3) 0, rgba(255,255,255,0.3) 1px, transparent 1px, transparent 32px)'
+        }}/>
+        {/* Browser chrome mock */}
+        <div className="absolute inset-4">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg h-full flex flex-col gap-0 overflow-hidden">
+            <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/10">
+              <span className="w-2 h-2 rounded-full bg-white/40"/>
+              <span className="w-2 h-2 rounded-full bg-white/40"/>
+              <span className="w-2 h-2 rounded-full bg-white/40"/>
+              <div className="ml-2 flex-1 h-2.5 rounded bg-white/15"/>
+            </div>
+            <div className="flex-1 p-3 flex flex-col gap-2">
+              <div className="h-2 bg-white/20 rounded-full w-2/3"/>
+              <div className="h-2 bg-white/12 rounded-full w-1/2"/>
+              <div className="mt-2 flex-1 bg-white/8 rounded-lg min-h-[40px]"/>
+              <div className="h-2 bg-white/12 rounded-full w-3/4"/>
+              <div className="h-2 bg-white/10 rounded-full w-1/3"/>
+            </div>
+          </div>
+        </div>
+        {/* Hover overlay */}
+        <div className="project-overlay absolute inset-0 bg-black/65 backdrop-blur-[2px] flex items-center justify-center gap-3">
+          <button className="flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-full text-xs font-bold hover:bg-white/90 transition-colors">
+            <Icon name="eye" size={13}/> Ver demo
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2.5 bg-white/10 text-white border border-white/25 rounded-full text-xs font-bold hover:bg-white/20 transition-colors">
+            <Icon name="github" size={13}/> Código
+          </button>
+        </div>
+      </div>
+      {/* Content */}
+      <div className={`p-6 ${dark ? 'bg-black' : 'bg-white'}`}>
+        <div className="flex items-start justify-between mb-3">
+          <h3 className={`font-display font-bold text-lg leading-tight group-hover:text-violet-500 transition-colors ${dark ? 'text-white' : 'text-black'}`}>
+            {p.title}
+          </h3>
+          <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold shrink-0 ml-2 ${dark ? 'bg-white/[0.05] text-white/40' : 'bg-black/[0.05] text-black/40'}`}>
+            {p.category}
+          </span>
+        </div>
+        <p className={`text-sm leading-relaxed mb-5 ${dark ? 'text-white/45' : 'text-black/45'}`}>{p.desc}</p>
+        <div className="flex flex-wrap gap-1.5">
+          {p.tags.map(t => (
+            <span key={t} className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors group-hover:border-violet-500/30 ${
+              dark ? 'border-white/10 text-white/45' : 'border-black/10 text-black/45'}`}>{t}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────
+   FEATURED WORKS
+───────────────────────────────────────── */
+const FeaturedWorks = ({ dark, setView }) => (
+  <section id="works" className={`py-32 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
+    <div className="max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+        <div>
+          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Mis Trabajos</span>
+          <h2 className={`font-display text-5xl font-bold tracking-tight leading-none ${dark ? 'text-white' : 'text-black'}`}>
+            Proyectos<br/>destacados.
+          </h2>
+        </div>
+        <p className={`text-sm max-w-xs leading-relaxed ${dark ? 'text-white/45' : 'text-black/45'}`}>
+          Una selección de trabajos que representan mi enfoque en diseño, desarrollo y entrega de valor real.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        {FEATURED.map(p => <ProjectCard key={p.id} p={p} dark={dark}/>)}
+      </div>
+
+      <div className="text-center">
+        <button onClick={() => { setView('projects'); window.scrollTo({ top:0 }); }}
+          className="group inline-flex items-center gap-3 px-9 py-4 rounded-full font-semibold border-2 border-violet-500 text-violet-500 hover:bg-violet-600 hover:text-white hover:border-violet-600 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/30 hover:-translate-y-0.5">
+          Ver todos los proyectos
+          <Icon name="arrowRight" size={18} className="group-hover:translate-x-1 transition-transform"/>
+        </button>
+      </div>
+    </div>
+  </section>
+);
+
+/* ─────────────────────────────────────────
+   TESTIMONIALS
+───────────────────────────────────────── */
+const Testimonials = ({ dark }) => (
+  <section className={`py-32 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
+    <div className="max-w-7xl mx-auto">
+      <div className="text-center mb-16">
+        <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Testimonios</span>
+        <h2 className={`font-display text-5xl font-bold tracking-tight leading-none ${dark ? 'text-white' : 'text-black'}`}>
+          Lo que dicen<br/><span className="text-violet-500">mis clientes.</span>
+        </h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {TESTIMONIALS.map((t, i) => (
+          <div key={i} className={`group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-1.5 hover:border-violet-500/25 ${
+            dark ? 'border-white/[0.08] hover:bg-violet-500/[0.03]' : 'border-black/[0.08] hover:bg-violet-50/60'}`}>
+            <div className="flex gap-1 mb-6">
+              {[...Array(5)].map((_,j) => <StarFilled key={j} size={14} className="text-amber-400"/>)}
+            </div>
+            <p className={`text-sm leading-relaxed mb-8 ${dark ? 'text-white/65' : 'text-black/65'}`}>"{t.text}"</p>
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
+                style={{ background:`linear-gradient(135deg, ${t.accent}, ${t.accent}88)` }}>
+                {t.avatar}
+              </div>
+              <div>
+                <div className={`text-sm font-semibold ${dark ? 'text-white' : 'text-black'}`}>{t.name}</div>
+                <div className={`text-xs mt-0.5 ${dark ? 'text-white/40' : 'text-black/40'}`}>{t.role}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+/* ─────────────────────────────────────────
+   CONTACT
+───────────────────────────────────────── */
+const Contact = ({ dark }) => {
+  const [form, setForm] = useState({ name:'', email:'', message:'' });
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    setSent(true);
+    setTimeout(() => { setSent(false); setForm({ name:'', email:'', message:'' }); }, 3500);
+  };
+
+  const inp = `w-full px-4 py-3.5 rounded-xl text-sm outline-none border transition-all duration-200 ${
+    dark ? 'bg-white/[0.04] border-white/10 text-white placeholder-white/25 focus:border-violet-500 focus:bg-violet-500/[0.05]'
+         : 'bg-black/[0.03] border-black/10 text-black placeholder-black/30 focus:border-violet-500 focus:bg-violet-50/70'}`;
+
+  const contactItems = [
+    { icon:'mail',   label:'Email',     val:'hola@adrianaoquendo.com' },
+    { icon:'mapPin', label:'Ubicación', val:'Buenos Aires, Argentina' },
+    { icon:'globe',  label:'Web',       val:'adrianaoquendo.com' },
+  ];
+  const socials = [
+    { icon:'twitter',  label:'Twitter' },
+    { icon:'linkedin', label:'LinkedIn' },
+    { icon:'github',   label:'GitHub' },
+  ];
+
+  return (
+    <section id="contact" className={`py-32 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+          {/* Left info */}
+          <div>
+            <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Contacto</span>
+            <h2 className={`font-display text-5xl font-bold tracking-tight leading-none mb-7 ${dark ? 'text-white' : 'text-black'}`}>
+              ¿Tienes un<br/><span className="text-violet-500">proyecto</span><br/>en mente?
+            </h2>
+            <p className={`text-base leading-relaxed mb-12 ${dark ? 'text-white/50' : 'text-black/50'}`}>
+              Hablemos sobre cómo convertir tu visión en un producto digital excepcional. Respondo en menos de 24 horas.
+            </p>
+            <div className="flex flex-col gap-5 mb-10">
+              {contactItems.map(c => (
+                <div key={c.label} className="flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${dark ? 'bg-white/[0.05] text-white/50' : 'bg-black/[0.04] text-black/50'}`}>
+                    <Icon name={c.icon} size={15}/>
+                  </div>
+                  <div>
+                    <div className={`text-xs mb-0.5 ${dark ? 'text-white/30' : 'text-black/30'}`}>{c.label}</div>
+                    <div className={`text-sm font-medium ${dark ? 'text-white' : 'text-black'}`}>{c.val}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-2.5">
+              {socials.map(s => (
+                <button key={s.label} className={`w-10 h-10 rounded-xl flex items-center justify-center border transition-all hover:border-violet-500 hover:text-violet-500 ${
+                  dark ? 'border-white/10 text-white/50' : 'border-black/10 text-black/50'}`}>
+                  <Icon name={s.icon} size={15}/>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>Nombre</label>
+                <input type="text" placeholder="Tu nombre" className={inp} value={form.name} onChange={e => setForm({...form, name:e.target.value})} required/>
+              </div>
+              <div>
+                <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>Email</label>
+                <input type="email" placeholder="tu@email.com" className={inp} value={form.email} onChange={e => setForm({...form, email:e.target.value})} required/>
+              </div>
+            </div>
+            <div>
+              <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>Mensaje</label>
+              <textarea placeholder="Cuéntame sobre tu proyecto, presupuesto y timeline..." rows={7} className={`${inp} resize-none`} value={form.message} onChange={e => setForm({...form, message:e.target.value})} required/>
+            </div>
+            <button type="submit" className={`group flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 ${
+              sent ? 'bg-emerald-500' : 'bg-violet-600 hover:bg-violet-500 hover:shadow-xl hover:shadow-violet-500/30 hover:-translate-y-0.5'}`}>
+              {sent ? (<><Icon name="check" size={18}/> ¡Mensaje enviado con éxito!</>) : (<>Enviar mensaje <Icon name="send" size={18} className="group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform"/></>)}
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+const Footer = ({ dark }) => (
+  <footer className={`py-10 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
+    <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className={`font-sans text-lg font-semibold ${dark ? 'text-white' : 'text-black'}`}>
+        adriana<span className="text-violet-500">.</span>
+      </div>
+      <div className={`text-xs ${dark ? 'text-white/30' : 'text-black/30'}`}>
+        © 2026 Adriana Oquendo — Diseñado y desarrollado con precisión
+      </div>
+      <button onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}
+        className={`text-xs font-medium transition-colors hover:text-violet-500 ${dark ? 'text-white/35' : 'text-black/35'}`}>
+        Volver arriba ↑
+      </button>
+    </div>
+  </footer>
+);
+
+/* ─────────────────────────────────────────
+   ALL PROJECTS PAGE
+───────────────────────────────────────── */
+const AllProjects = ({ dark, setView }) => {
+  const [filter, setFilter] = useState('Todos');
+  const filters = ['Todos','Diseño','Desarrollo'];
+  const shown = filter === 'Todos' ? ALL_PROJECTS : ALL_PROJECTS.filter(p => p.category === filter);
+
+  return (
+    <div className="min-h-screen pt-28 pb-24 px-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Back */}
+        <button onClick={() => setView('home')}
+          className={`inline-flex items-center gap-2 text-sm font-medium mb-10 transition-all hover:text-violet-500 hover:-translate-x-0.5 ${dark ? 'text-white/50' : 'text-black/50'}`}>
+          <Icon name="arrowLeft" size={15}/> Volver al inicio
+        </button>
+
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+          <div>
+            <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Portafolio Completo</span>
+            <h1 className={`font-display font-bold tracking-tight leading-none ${dark ? 'text-white' : 'text-black'}`} style={{ fontSize:'clamp(2.8rem,7vw,6rem)' }}>
+              Todos los<br/><span className="text-violet-500">trabajos.</span>
+            </h1>
+          </div>
+          <p className={`text-base max-w-sm leading-relaxed ${dark ? 'text-white/45' : 'text-black/45'}`}>
+            {ALL_PROJECTS.length} proyectos que demuestran mi capacidad para resolver problemas complejos con diseño y código de alta calidad.
+          </p>
+        </div>
+
+        {/* Filters */}
+        <div className="flex items-center gap-3 mb-12 flex-wrap">
+          <span className={`text-xs font-medium ${dark ? 'text-white/30' : 'text-black/30'}`}>Filtrar por:</span>
+          {filters.map(f => (
+            <button key={f} onClick={() => setFilter(f)}
+              className={`px-5 py-2 rounded-full text-sm font-semibold border transition-all duration-200 ${
+                filter === f
+                  ? 'bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-500/25'
+                  : dark
+                    ? 'border-white/10 text-white/50 hover:border-violet-500/40 hover:text-violet-400'
+                    : 'border-black/10 text-black/50 hover:border-violet-500/40 hover:text-violet-600'}`}>
+              {f}
+              {filter === f && <span className="ml-2 text-xs opacity-70">{shown.length}</span>}
+            </button>
+          ))}
+        </div>
+
+        {/* Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {shown.map(p => <ProjectCard key={p.id} p={p} dark={dark}/>)}
+        </div>
+
+        {shown.length === 0 && (
+          <div className={`text-center py-24 text-sm ${dark ? 'text-white/25' : 'text-black/25'}`}>
+            Sin proyectos en esta categoría.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────
+   HOME
+───────────────────────────────────────── */
+const Home = ({ dark, setView, goTo }) => (
+  <>
+    <Hero dark={dark} setView={setView} goTo={goTo}/>
+    <LogoCarousel dark={dark}/>
+    <About dark={dark}/>
+    <Services dark={dark}/>
+    <FeaturedWorks dark={dark} setView={setView}/>
+    <Testimonials dark={dark}/>
+    <Contact dark={dark}/>
+    <Footer dark={dark}/>
+  </>
+);
+
+/* ─────────────────────────────────────────
+   APP ROOT
+───────────────────────────────────────── */
+const App = () => {
+  const [dark, setDark] = useState(true);
+  const [view, setView] = useState('home');
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+    document.body.style.backgroundColor = dark ? '#000000' : '#ffffff';
+    document.body.style.color = dark ? '#ffffff' : '#000000';
+    document.body.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+  }, [dark]);
+
+  const goTo = id => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+  };
+
+  return (
+    <div className={`min-h-screen transition-colors duration-300 ${dark ? 'bg-black text-white' : 'bg-white text-black'}`}>
+      <Navbar dark={dark} setDark={setDark} view={view} setView={setView} goTo={goTo}/>
+      {view === 'home'
+        ? <Home dark={dark} setView={setView} goTo={goTo}/>
+        : <AllProjects dark={dark} setView={setView}/>}
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
