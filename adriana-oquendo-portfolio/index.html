@@ -306,15 +306,6 @@ const Hero = ({ dark, setView, goTo }) => (
         </button>
       </div>
 
-      {/* Stats */}
-      <div className={`border-t pt-8 flex flex-wrap justify-center gap-10 anim-fade-up-3 ${dark ? 'border-white/10' : 'border-black/10'}`}>
-        {[['3+','Years of experience'],['40+','Projects delivered'],['2','Languages']].map(([n,l]) => (
-          <div key={l} className="text-center">
-            <div className={`font-display text-4xl font-bold mb-1 ${dark ? 'text-white' : 'text-black'}`}>{n}</div>
-            <div className={`text-sm ${dark ? 'text-white/40' : 'text-black/40'}`}>{l}</div>
-          </div>
-        ))}
-      </div>
     </div>
   </section>
 );
@@ -390,7 +381,7 @@ const About = ({ dark }) => {
             I'm Adriana Oquendo, a passionate, creative, and detail-oriented Product Maker based in Buenos Aires. I express ideas through UX/UI design, branding, and web development — crafting digital experiences that balance aesthetics with functionality.
           </p>
           <p className={`text-base leading-relaxed mb-10 ${dark ? 'text-white/55' : 'text-black/55'}`}>
-            Originally from Venezuela, I'm constantly learning, exploring new technologies, and leveraging AI-powered tools to build smarter workflows and more polished results. Spanish & English speaker, driven by curiosity, creativity, and meaningful collaboration.
+            Originally from Venezuela, I'm constantly learning, exploring new technologies, and leveraging AI-powered tools to build smarter workflows and more polished results — driven by curiosity, creativity, and meaningful collaboration.
           </p>
           <div className="flex flex-wrap gap-2">
             {skills.map(s => (
