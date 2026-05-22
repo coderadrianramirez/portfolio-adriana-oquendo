@@ -119,22 +119,19 @@ const StarFilled = ({ size = 14, className = '' }) => (
 /* ─────────────────────────────────────────
    DATA
 ───────────────────────────────────────── */
-const LOGOS = ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Figma', 'Node.js', 'GraphQL', 'PostgreSQL', 'Framer Motion', 'Vercel', 'Stripe', 'AWS'];
+const LOGOS = ['Webflow', 'Figma', 'React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'GSAP', 'Vercel', 'UI/UX Design', 'Branding', 'Design Systems'];
 
 const FEATURED = [
-  { id:1, title:'Nexus Dashboard', desc:'Enterprise analytics platform with real-time data visualizations, smart alerts, and a fully customizable reporting interface.', tags:['React','Tailwind','D3.js'], category:'Development', gradient:'from-violet-600 via-purple-600 to-indigo-700', accent:'#8B5CF6' },
-  { id:2, title:'Aura Branding', desc:'Complete visual identity for a premium wellness startup — from naming and brand strategy to a full scalable design system.', tags:['Figma','Branding','UI/UX'], category:'Branding', gradient:'from-rose-500 via-pink-500 to-fuchsia-600', accent:'#F43F5E' },
-  { id:3, title:'Orbit E-commerce', desc:'Online store with a seamless shopping experience, optimized cart flow, and frictionless checkout built for conversion.', tags:['Next.js','Node.js','Stripe'], category:'Development', gradient:'from-cyan-500 via-sky-500 to-blue-600', accent:'#06B6D4' },
+  { id:1, title:'Chill IT', desc:'B2B web platform for a sustainable beverage cooling startup — bilingual, conversion-focused landing pages showcasing precision cooling products for the hospitality industry.', tags:['Webflow','B2B','Bilingual'], category:'Development', role:'Developer', url:'https://www.chillit.com/es', gradient:'from-cyan-500 via-sky-500 to-blue-600', accent:'#06B6D4' },
+  { id:2, title:'VILA', desc:'Luxury residential real estate site for a Montevideo tower — immersive animations, smart home highlights, and a refined editorial layout that sells a lifestyle, not just apartments.', tags:['Webflow','Real Estate','UI/UX'], category:'Development', role:'Designer & Developer', url:'https://preview-01vila.webflow.io/', gradient:'from-emerald-500 via-teal-500 to-green-700', accent:'#10B981' },
+  { id:3, title:'404 Club', desc:'Brand and website for an exclusive tech membership community — bold identity built around a glitched 404 motif, clean membership UX, and a sharp editorial aesthetic.', tags:['Figma','Branding','Community'], category:'Design', role:'Designer', url:'https://www.join404club.com/', gradient:'from-violet-600 via-purple-600 to-indigo-700', accent:'#8B5CF6' },
 ];
 
 const ALL_PROJECTS = [
   ...FEATURED,
-  { id:4, title:'Lumina App', desc:'Mobile habit-tracking app with minimalist design, smart notifications, and a calm, distraction-free user experience.', tags:['React Native','Figma','Expo'], category:'Design', gradient:'from-amber-400 via-orange-400 to-red-500', accent:'#F59E0B' },
-  { id:5, title:'Helix CMS', desc:'Headless content management system with REST API, GraphQL support, and a clean admin panel built for editorial teams.', tags:['Node.js','GraphQL','PostgreSQL'], category:'Development', gradient:'from-emerald-500 via-teal-500 to-cyan-600', accent:'#10B981' },
-  { id:6, title:'Flux Agency Site', desc:'Creative agency website with scroll parallax animations, cinematic transitions, and bold editorial typography.', tags:['Next.js','GSAP','Tailwind'], category:'Development', gradient:'from-purple-500 via-violet-600 to-indigo-700', accent:'#A855F7' },
-  { id:7, title:'Vanta Design System', desc:'Design system with 200+ documented components, semantic tokens, and a configured Storybook for fast, consistent builds.', tags:['Figma','Tokens','Storybook'], category:'Branding', gradient:'from-slate-500 via-slate-600 to-slate-800', accent:'#64748B' },
-  { id:8, title:'Prism Analytics SaaS', desc:'Web analytics SaaS platform with a customizable dashboard, advanced filters, real-time data, and export capabilities.', tags:['React','TypeScript','WebSockets'], category:'Development', gradient:'from-fuchsia-500 via-purple-500 to-violet-600', accent:'#D946EF' },
-  { id:9, title:'Echo Social', desc:'Niche social network with an algorithmic feed, real-time messaging, and an immersive visual experience built for community.', tags:['Next.js','Prisma','Figma'], category:'Design', gradient:'from-sky-400 via-cyan-500 to-teal-600', accent:'#0EA5E9' },
+  { id:4, title:'Charco Haus', desc:'Coliving platform for Barcelona — lifestyle-forward Webflow site presenting furnished rooms, curated amenities, and flexible rental plans for professionals relocating to the city.', tags:['Webflow','Coliving','Lifestyle'], category:'Development', role:'Developer', url:'https://charcohaus.webflow.io/', gradient:'from-amber-400 via-orange-400 to-rose-500', accent:'#F59E0B' },
+  { id:5, title:'Talk to Inbox', desc:'SaaS marketing site for a voice-driven email management tool — clear value hierarchy, feature showcases, and a tiered pricing layout optimized for busy professionals.', tags:['Webflow','SaaS','Product'], category:'Development', role:'Designer & Developer', url:'https://tti-site.webflow.io/', gradient:'from-slate-500 via-slate-600 to-slate-800', accent:'#64748B' },
+  { id:6, title:'TIL Crypto', desc:'Social platform for crypto investors and influencers — vibrant, playful design with social trading rankings, portfolio tracking, and onboarding flows that make crypto feel approachable.', tags:['Webflow','Crypto','UI/UX'], category:'Design', role:'Designer & Developer', url:'https://til-2961d4.webflow.io/', gradient:'from-yellow-400 via-orange-400 to-red-500', accent:'#F59E0B' },
 ];
 
 const SERVICES = [
@@ -445,44 +442,41 @@ const Services = ({ dark }) => (
 ───────────────────────────────────────── */
 const ProjectCard = ({ p, dark }) => {
   const [hov, setHov] = useState(false);
+  const [imgOk, setImgOk] = useState(true);
+  const screenshotUrl = p.url
+    ? `https://image.thum.io/get/width/800/crop/500/allowJPG/wait/3/${p.url}`
+    : null;
+
   return (
     <div className={`project-card group relative rounded-2xl overflow-hidden border transition-all duration-500 hover:-translate-y-2 cursor-pointer ${
       dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}
       onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
       style={{ boxShadow: hov ? `0 32px 64px ${p.accent}22` : 'none' }}>
-      {/* Image / mockup */}
+      {/* Image */}
       <div className="relative h-56 overflow-hidden">
-        <div className={`project-img absolute inset-0 bg-gradient-to-br ${p.gradient}`}/>
-        {/* Subtle grid */}
-        <div className="absolute inset-0 opacity-[0.15]" style={{
-          backgroundImage:'repeating-linear-gradient(0deg, rgba(255,255,255,0.3) 0, rgba(255,255,255,0.3) 1px, transparent 1px, transparent 32px), repeating-linear-gradient(90deg, rgba(255,255,255,0.3) 0, rgba(255,255,255,0.3) 1px, transparent 1px, transparent 32px)'
-        }}/>
-        {/* Browser chrome mock */}
-        <div className="absolute inset-4">
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg h-full flex flex-col gap-0 overflow-hidden">
-            <div className="flex items-center gap-1.5 px-3 py-2 border-b border-white/10">
-              <span className="w-2 h-2 rounded-full bg-white/40"/>
-              <span className="w-2 h-2 rounded-full bg-white/40"/>
-              <span className="w-2 h-2 rounded-full bg-white/40"/>
-              <div className="ml-2 flex-1 h-2.5 rounded bg-white/15"/>
-            </div>
-            <div className="flex-1 p-3 flex flex-col gap-2">
-              <div className="h-2 bg-white/20 rounded-full w-2/3"/>
-              <div className="h-2 bg-white/12 rounded-full w-1/2"/>
-              <div className="mt-2 flex-1 bg-white/8 rounded-lg min-h-[40px]"/>
-              <div className="h-2 bg-white/12 rounded-full w-3/4"/>
-              <div className="h-2 bg-white/10 rounded-full w-1/3"/>
-            </div>
-          </div>
-        </div>
+        {/* Gradient fallback always underneath */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${p.gradient}`}/>
+        {/* Real screenshot on top if available */}
+        {screenshotUrl && imgOk && (
+          <img
+            src={screenshotUrl}
+            alt={p.title}
+            onError={() => setImgOk(false)}
+            className="project-img absolute inset-0 w-full h-full object-cover object-top"
+          />
+        )}
         {/* Hover overlay */}
-        <div className="project-overlay absolute inset-0 bg-black/65 backdrop-blur-[2px] flex items-center justify-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-full text-xs font-bold hover:bg-white/90 transition-colors">
-            <Icon name="eye" size={13}/> View demo
-          </button>
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-white/10 text-white border border-white/25 rounded-full text-xs font-bold hover:bg-white/20 transition-colors">
-            <Icon name="github" size={13}/> Code
-          </button>
+        <div className="project-overlay absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center gap-3">
+          {p.url ? (
+            <a href={p.url} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-full text-xs font-bold hover:bg-white/90 transition-colors">
+              <Icon name="eye" size={13}/> Visit site
+            </a>
+          ) : (
+            <button className="flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-full text-xs font-bold hover:bg-white/90 transition-colors">
+              <Icon name="eye" size={13}/> View demo
+            </button>
+          )}
         </div>
       </div>
       {/* Content */}
@@ -492,7 +486,7 @@ const ProjectCard = ({ p, dark }) => {
             {p.title}
           </h3>
           <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold shrink-0 ml-2 ${dark ? 'bg-white/[0.05] text-white/40' : 'bg-black/[0.05] text-black/40'}`}>
-            {p.category}
+            {p.role || p.category}
           </span>
         </div>
         <p className={`text-sm leading-relaxed mb-5 ${dark ? 'text-white/45' : 'text-black/45'}`}>{p.desc}</p>
@@ -693,7 +687,7 @@ const Footer = ({ dark }) => (
 ───────────────────────────────────────── */
 const AllProjects = ({ dark, setView }) => {
   const [filter, setFilter] = useState('All');
-  const filters = ['All','Design','Development','Branding'];
+  const filters = ['All','Design','Development'];
   const shown = filter === 'All' ? ALL_PROJECTS : ALL_PROJECTS.filter(p => p.category === filter);
 
   return (
