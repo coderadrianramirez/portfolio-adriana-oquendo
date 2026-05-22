@@ -117,48 +117,119 @@ const StarFilled = ({ size = 14, className = '' }) => (
 );
 
 /* ─────────────────────────────────────────
+   TRANSLATIONS
+───────────────────────────────────────── */
+const TEXTS = {
+  en: {
+    navAbout:'About', navServices:'Services', navWork:'Work',
+    navBack:'Back to home', navCta:"Let's Talk",
+    heroBadge:'Available for new projects — 2026',
+    heroSub:'Product Maker based in Buenos Aires. I craft thoughtful digital experiences through UX/UI design, branding, and web development — where aesthetics meet solid systems.',
+    heroCta1:'View Work', heroCta2:"Let's Talk",
+    aboutLabel:'About me',
+    aboutH2:['Where aesthetics','meet','strong systems.'],
+    aboutP1:"I'm Adriana Oquendo, a passionate, creative, and detail-oriented Product Maker based in Buenos Aires. I express ideas through UX/UI design, branding, and web development — crafting digital experiences that balance aesthetics with functionality.",
+    aboutP2:"Originally from Venezuela, I'm constantly learning, exploring new technologies, and leveraging AI-powered tools to build smarter workflows and more polished results — driven by curiosity, creativity, and meaningful collaboration.",
+    servicesLabel:'Services', servicesH2:['What I can','do for you.'],
+    servicesSub:'Every service is designed to deliver measurable results, not just aesthetics. Quality and detail are non-negotiable.',
+    worksLabel:'Selected Work', worksH2:['Featured','projects.'],
+    worksSub:'A curated selection of work that reflects my approach to design, development, and delivering real value.',
+    worksViewAll:'View all projects',
+    visitSite:'Visit site', viewDemo:'View demo',
+    testimonialsLabel:'Testimonials', testimonialsH2:['What my clients','have to say.'],
+    contactLabel:'Contact', contactH2:['Got a','project','in mind?'],
+    contactSub:"Let's talk about turning your vision into an exceptional digital product. I respond within 24 hours.",
+    contactLoc:'Location',
+    fName:'Name', fNamePH:'Your name', fEmail:'Email', fEmailPH:'you@email.com',
+    fMsg:'Message', fMsgPH:'Tell me about your project, budget, and timeline...',
+    fSubmit:'Send message', fSuccess:'Message sent successfully!',
+    footerCopy:'© 2026 Adriana Oquendo — Designed and built with precision',
+    footerBack:'Back to top ↑',
+    allLabel:'Full Portfolio', allH2:['All','projects.'],
+    allSub: n=>`${n} projects that demonstrate my ability to solve complex problems with design and high-quality code.`,
+    allBack:'Back to home', allFilterBy:'Filter by:',
+    filterDefs:[{v:'All',l:'All'},{v:'Design',l:'Design'},{v:'Development',l:'Development'}],
+    allEmpty:'No projects in this category.',
+    yearsLabel:'years exp.', projectsLabel:'projects',
+  },
+  es: {
+    navAbout:'Sobre mí', navServices:'Servicios', navWork:'Trabajos',
+    navBack:'Volver al inicio', navCta:'Hablemos',
+    heroBadge:'Disponible para nuevos proyectos — 2026',
+    heroSub:'Product Maker con base en Buenos Aires. Creo experiencias digitales a través de diseño UX/UI, branding y desarrollo web — donde la estética se encuentra con los sistemas sólidos.',
+    heroCta1:'Ver trabajos', heroCta2:'Hablemos',
+    aboutLabel:'Sobre mí',
+    aboutH2:['Donde la estética','se une a','los sistemas sólidos.'],
+    aboutP1:'Soy Adriana Oquendo, una Product Maker apasionada, creativa y orientada al detalle con base en Buenos Aires. Expreso ideas a través del diseño UX/UI, branding y desarrollo web — creando experiencias digitales que equilibran la estética con la funcionalidad.',
+    aboutP2:'Originaria de Venezuela, estoy en constante aprendizaje, explorando nuevas tecnologías y aprovechando herramientas de IA para construir flujos de trabajo más inteligentes y resultados más pulidos — impulsada por la curiosidad, la creatividad y la colaboración significativa.',
+    servicesLabel:'Servicios', servicesH2:['Lo que puedo','hacer por ti.'],
+    servicesSub:'Cada servicio está diseñado para entregar resultados medibles, no solo estética. La calidad y el detalle no son opcionales.',
+    worksLabel:'Trabajos seleccionados', worksH2:['Proyectos','destacados.'],
+    worksSub:'Una selección de trabajos que refleja mi enfoque en diseño, desarrollo y la entrega de valor real.',
+    worksViewAll:'Ver todos los proyectos',
+    visitSite:'Visitar sitio', viewDemo:'Ver demo',
+    testimonialsLabel:'Testimonios', testimonialsH2:['Lo que dicen','mis clientes.'],
+    contactLabel:'Contacto', contactH2:['¿Tienes un','proyecto','en mente?'],
+    contactSub:'Hablemos sobre cómo convertir tu visión en un producto digital excepcional. Respondo en menos de 24 horas.',
+    contactLoc:'Ubicación',
+    fName:'Nombre', fNamePH:'Tu nombre', fEmail:'Email', fEmailPH:'tu@email.com',
+    fMsg:'Mensaje', fMsgPH:'Cuéntame sobre tu proyecto, presupuesto y timeline...',
+    fSubmit:'Enviar mensaje', fSuccess:'¡Mensaje enviado con éxito!',
+    footerCopy:'© 2026 Adriana Oquendo — Diseñado y desarrollado con precisión',
+    footerBack:'Volver arriba ↑',
+    allLabel:'Portafolio Completo', allH2:['Todos los','proyectos.'],
+    allSub: n=>`${n} proyectos que demuestran mi capacidad para resolver problemas complejos con diseño y código de alta calidad.`,
+    allBack:'Volver al inicio', allFilterBy:'Filtrar por:',
+    filterDefs:[{v:'All',l:'Todos'},{v:'Design',l:'Diseño'},{v:'Development',l:'Desarrollo'}],
+    allEmpty:'Sin proyectos en esta categoría.',
+    yearsLabel:'años exp.', projectsLabel:'proyectos',
+  }
+};
+
+/* ─────────────────────────────────────────
    DATA
 ───────────────────────────────────────── */
 const LOGOS = ['Webflow', 'Figma', 'React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Framer Motion', 'GSAP', 'Vercel', 'UI/UX Design', 'Branding', 'Design Systems'];
 
 const FEATURED = [
-  { id:1, title:'Chill IT', desc:'B2B web platform for a sustainable beverage cooling startup — bilingual, conversion-focused landing pages showcasing precision cooling products for the hospitality industry.', tags:['Webflow','B2B','Bilingual'], category:'Development', role:'Developer', url:'https://www.chillit.com/es', gradient:'from-cyan-500 via-sky-500 to-blue-600', accent:'#06B6D4' },
-  { id:2, title:'VILA', desc:'Luxury residential real estate site for a Montevideo tower — immersive animations, smart home highlights, and a refined editorial layout that sells a lifestyle, not just apartments.', tags:['Webflow','Real Estate','UI/UX'], category:'Development', role:'Designer & Developer', url:'https://preview-01vila.webflow.io/', gradient:'from-emerald-500 via-teal-500 to-green-700', accent:'#10B981' },
-  { id:3, title:'404 Club', desc:'Brand and website for an exclusive tech membership community — bold identity built around a glitched 404 motif, clean membership UX, and a sharp editorial aesthetic.', tags:['Figma','Branding','Community'], category:'Design', role:'Designer', url:'https://www.join404club.com/', gradient:'from-violet-600 via-purple-600 to-indigo-700', accent:'#8B5CF6' },
+  { id:1, title:'Chill IT', desc:'B2B web platform for a sustainable beverage cooling startup — bilingual, conversion-focused landing pages showcasing precision cooling products for the hospitality industry.', descEs:'Plataforma web B2B para una startup de enfriamiento sustentable — páginas de aterrizaje bilingües y enfocadas en conversión que presentan productos de enfriamiento de precisión para la industria gastronómica.', tags:['Webflow','B2B','Bilingual'], category:'Development', role:'Developer', url:'https://www.chillit.com/es', gradient:'from-cyan-500 via-sky-500 to-blue-600', accent:'#06B6D4' },
+  { id:2, title:'VILA', desc:'Luxury residential real estate site for a Montevideo tower — immersive animations, smart home highlights, and a refined editorial layout that sells a lifestyle, not just apartments.', descEs:'Sitio inmobiliario de lujo para una torre residencial en Montevideo — animaciones inmersivas, highlights de domótica y un layout editorial refinado que vende un estilo de vida, no solo departamentos.', tags:['Webflow','Real Estate','UI/UX'], category:'Development', role:'Designer & Developer', url:'https://preview-01vila.webflow.io/', gradient:'from-emerald-500 via-teal-500 to-green-700', accent:'#10B981' },
+  { id:3, title:'404 Club', desc:'Brand and website for an exclusive tech membership community — bold identity built around a glitched 404 motif, clean membership UX, and a sharp editorial aesthetic.', descEs:'Marca y sitio web para una comunidad exclusiva de tecnología — identidad audaz construida alrededor de un motivo 404 glitcheado, UX de membresía limpia y una estética editorial afilada.', tags:['Figma','Branding','Community'], category:'Design', role:'Designer', url:'https://www.join404club.com/', gradient:'from-violet-600 via-purple-600 to-indigo-700', accent:'#8B5CF6' },
 ];
 
 const ALL_PROJECTS = [
   ...FEATURED,
-  { id:4, title:'Charco Haus', desc:'Coliving platform for Barcelona — lifestyle-forward Webflow site presenting furnished rooms, curated amenities, and flexible rental plans for professionals relocating to the city.', tags:['Webflow','Coliving','Lifestyle'], category:'Development', role:'Developer', url:'https://charcohaus.webflow.io/', gradient:'from-amber-400 via-orange-400 to-rose-500', accent:'#F59E0B' },
-  { id:5, title:'Talk to Inbox', desc:'SaaS marketing site for a voice-driven email management tool — clear value hierarchy, feature showcases, and a tiered pricing layout optimized for busy professionals.', tags:['Webflow','SaaS','Product'], category:'Development', role:'Designer & Developer', url:'https://tti-site.webflow.io/', gradient:'from-slate-500 via-slate-600 to-slate-800', accent:'#64748B' },
-  { id:6, title:'TIL Crypto', desc:'Social platform for crypto investors and influencers — vibrant, playful design with social trading rankings, portfolio tracking, and onboarding flows that make crypto feel approachable.', tags:['Webflow','Crypto','UI/UX'], category:'Design', role:'Designer & Developer', url:'https://til-2961d4.webflow.io/', gradient:'from-yellow-400 via-orange-400 to-red-500', accent:'#F59E0B' },
-  { id:7, title:'Smartbe3', desc:'Enterprise tech consulting site for a cybersecurity and observability firm serving Fortune 500 clients — clean B2B design with sharp hierarchy, case studies, and a credibility-first layout.', tags:['Webflow','B2B','Enterprise'], category:'Development', role:'Designer & Developer', url:'https://www.smartbe3.com/', gradient:'from-slate-600 via-blue-900 to-slate-900', accent:'#3B82F6' },
-  { id:8, title:'Baires Grill', desc:'Restaurant website for an upscale Argentine steakhouse chain with 9 locations in Florida and New York — elegant design, online ordering integration, and event booking flows.', tags:['Web','Restaurant','UI/UX'], category:'Development', role:'Developer', url:'https://www.bairesgrill.com/', gradient:'from-red-700 via-rose-700 to-red-900', accent:'#DC2626' },
-  { id:9, title:'LifeReady Academy', desc:'Educational platform for a K–12 life skills organization — clean, welcoming design with modular curriculum showcases, partnership pages, and clear calls-to-action for schools and families.', tags:['Web','Education','Non-profit'], category:'Development', role:'Developer', url:'https://lifereadyacademy.org/', gradient:'from-emerald-400 via-teal-500 to-cyan-600', accent:'#10B981' },
-  { id:10, title:'Corazón by Baires', desc:'Fine dining website for an upscale Latin-American restaurant in Orlando — romantic visual identity with ornate details, event booking, special occasion menus, and immersive food photography.', tags:['Web','Restaurant','Fine Dining'], category:'Development', role:'Developer', url:'https://www.corazonbybaires.com/', gradient:'from-rose-600 via-pink-700 to-red-800', accent:'#E11D48' },
+  { id:4, title:'Charco Haus', desc:'Coliving platform for Barcelona — lifestyle-forward Webflow site presenting furnished rooms, curated amenities, and flexible rental plans for professionals relocating to the city.', descEs:'Plataforma de coliving para Barcelona — sitio Webflow orientado al lifestyle con habitaciones amuebladas, amenidades curadas y planes de alquiler flexibles para profesionales que se mudan a la ciudad.', tags:['Webflow','Coliving','Lifestyle'], category:'Development', role:'Developer', url:'https://charcohaus.webflow.io/', gradient:'from-amber-400 via-orange-400 to-rose-500', accent:'#F59E0B' },
+  { id:5, title:'Talk to Inbox', desc:'SaaS marketing site for a voice-driven email management tool — clear value hierarchy, feature showcases, and a tiered pricing layout optimized for busy professionals.', descEs:'Sitio de marketing SaaS para una herramienta de gestión de email por voz — jerarquía de valor clara, showcases de features y un layout de precios por niveles optimizado para profesionales ocupados.', tags:['Webflow','SaaS','Product'], category:'Development', role:'Designer & Developer', url:'https://tti-site.webflow.io/', gradient:'from-slate-500 via-slate-600 to-slate-800', accent:'#64748B' },
+  { id:6, title:'TIL Crypto', desc:'Social platform for crypto investors and influencers — vibrant, playful design with social trading rankings, portfolio tracking, and onboarding flows that make crypto feel approachable.', descEs:'Plataforma social para inversores de cripto e influencers — diseño vibrante y lúdico con rankings de trading social, seguimiento de portafolios y flujos de onboarding que hacen la cripto accesible.', tags:['Webflow','Crypto','UI/UX'], category:'Design', role:'Designer & Developer', url:'https://til-2961d4.webflow.io/', gradient:'from-yellow-400 via-orange-400 to-red-500', accent:'#F59E0B' },
+  { id:7, title:'Smartbe3', desc:'Enterprise tech consulting site for a cybersecurity and observability firm serving Fortune 500 clients — clean B2B design with sharp hierarchy, case studies, and a credibility-first layout.', descEs:'Sitio de consultoría tech empresarial para una firma de ciberseguridad y observabilidad con clientes Fortune 500 — diseño B2B limpio con jerarquía clara, casos de estudio y un layout centrado en credibilidad.', tags:['Webflow','B2B','Enterprise'], category:'Development', role:'Designer & Developer', url:'https://www.smartbe3.com/', gradient:'from-slate-600 via-blue-900 to-slate-900', accent:'#3B82F6' },
+  { id:8, title:'Baires Grill', desc:'Restaurant website for an upscale Argentine steakhouse chain with 9 locations in Florida and New York — elegant design, online ordering integration, and event booking flows.', descEs:'Sitio web para una cadena de parrillas argentinas de alto nivel con 9 locales en Florida y Nueva York — diseño elegante, integración de pedidos online y flujos de reserva de eventos.', tags:['Web','Restaurant','UI/UX'], category:'Development', role:'Developer', url:'https://www.bairesgrill.com/', gradient:'from-red-700 via-rose-700 to-red-900', accent:'#DC2626' },
+  { id:9, title:'LifeReady Academy', desc:'Educational platform for a K–12 life skills organization — clean, welcoming design with modular curriculum showcases, partnership pages, and clear calls-to-action for schools and families.', descEs:'Plataforma educativa para una organización de habilidades para la vida K-12 — diseño limpio y acogedor con showcases del currículo modular, páginas de alianzas y llamadas a la acción claras para escuelas y familias.', tags:['Web','Education','Non-profit'], category:'Development', role:'Developer', url:'https://lifereadyacademy.org/', gradient:'from-emerald-400 via-teal-500 to-cyan-600', accent:'#10B981' },
+  { id:10, title:'Corazón by Baires', desc:'Fine dining website for an upscale Latin-American restaurant in Orlando — romantic visual identity with ornate details, event booking, special occasion menus, and immersive food photography.', descEs:'Sitio de restaurante de alta cocina latinoamericana en Orlando — identidad visual romántica con detalles ornamentales, reservas de eventos, menús especiales y fotografía de comida inmersiva.', tags:['Web','Restaurant','Fine Dining'], category:'Development', role:'Developer', url:'https://www.corazonbybaires.com/', gradient:'from-rose-600 via-pink-700 to-red-800', accent:'#E11D48' },
 ];
 
 const SERVICES = [
-  { icon:'palette', title:'UX/UI Design', desc:'From research and wireframes to high-fidelity prototypes in Figma. Interfaces that feel intuitive, look beautiful, and convert visitors into loyal users.', tags:['Figma','Prototyping','Research','Usability'] },
-  { icon:'globe', title:'Branding & Identity', desc:'Visual identities that tell a story. From naming to brand systems that scale consistently across every touchpoint and platform.', tags:['Brand Strategy','Visual Identity','Logo','Guidelines'] },
-  { icon:'code', title:'Web Development', desc:'Clean, performant, and accessible code with React and Next.js. Reusable components and smooth animations that elevate the experience.', tags:['React','Next.js','TypeScript','Tailwind'] },
-  { icon:'layers', title:'Design Systems', desc:'Scalable design systems with semantic tokens, documented components, and living style guides that empower teams to move faster.', tags:['Tokens','Storybook','Figma','Docs'] },
-  { icon:'zap', title:'AI-Powered Workflows', desc:'Leveraging AI tools to build smarter, faster, and more polished outputs across design, content, and product development.', tags:['AI Tools','Automation','Content','Efficiency'] },
-  { icon:'smartphone', title:'Digital Product Strategy', desc:'Thinking through the full product experience before a single line of code — from concept and user flows to launch-ready execution.', tags:['Product Thinking','UX Strategy','Flows','Roadmap'] },
+  { icon:'palette', title:'UX/UI Design', titleEs:'Diseño UX/UI', desc:'From research and wireframes to high-fidelity prototypes in Figma. Interfaces that feel intuitive, look beautiful, and convert visitors into loyal users.', descEs:'Desde la investigación y wireframes hasta prototipos de alta fidelidad en Figma. Interfaces que se sienten intuitivas, lucen hermosas y convierten visitantes en usuarios fieles.', tags:['Figma','Prototyping','Research','Usability'] },
+  { icon:'globe', title:'Branding & Identity', titleEs:'Branding e Identidad', desc:'Visual identities that tell a story. From naming to brand systems that scale consistently across every touchpoint and platform.', descEs:'Identidades visuales que cuentan una historia. Desde el naming hasta sistemas de marca que escalan de forma consistente en cada punto de contacto y plataforma.', tags:['Brand Strategy','Visual Identity','Logo','Guidelines'] },
+  { icon:'code', title:'Web Development', titleEs:'Desarrollo Web', desc:'Clean, performant, and accessible code with React and Next.js. Reusable components and smooth animations that elevate the experience.', descEs:'Código limpio, performante y accesible con React y Next.js. Componentes reutilizables y animaciones fluidas que elevan la experiencia.', tags:['React','Next.js','TypeScript','Tailwind'] },
+  { icon:'layers', title:'Design Systems', titleEs:'Sistemas de Diseño', desc:'Scalable design systems with semantic tokens, documented components, and living style guides that empower teams to move faster.', descEs:'Sistemas de diseño escalables con tokens semánticos, componentes documentados y guías de estilo vivas que permiten a los equipos moverse más rápido.', tags:['Tokens','Storybook','Figma','Docs'] },
+  { icon:'zap', title:'AI-Powered Workflows', titleEs:'Flujos con IA', desc:'Leveraging AI tools to build smarter, faster, and more polished outputs across design, content, and product development.', descEs:'Aprovechando herramientas de IA para construir outputs más inteligentes, rápidos y pulidos en diseño, contenido y desarrollo de productos.', tags:['AI Tools','Automation','Content','Efficiency'] },
+  { icon:'smartphone', title:'Digital Product Strategy', titleEs:'Estrategia de Producto', desc:'Thinking through the full product experience before a single line of code — from concept and user flows to launch-ready execution.', descEs:'Pensar la experiencia de producto completa antes de escribir una línea de código — desde el concepto y flujos de usuario hasta la ejecución lista para lanzar.', tags:['Product Thinking','UX Strategy','Flows','Roadmap'] },
 ];
 
 const TESTIMONIALS = [
-  { name:'Valentina Torres', role:'CEO, Startup Nexus', text:'She completely transformed our vision into a digital product that exceeded every expectation. The combination of design sensibility and technical execution is truly exceptional. I wouldn\'t work with anyone else.', avatar:'VT', accent:'#8B5CF6' },
-  { name:'Carlos Mendoza', role:'CTO, Aura Health', text:'The attention to detail and speed of delivery are unmatched. Every pixel is exactly where it should be. She shipped in record time without sacrificing a single millimeter of quality.', avatar:'CM', accent:'#06B6D4' },
-  { name:'Sofía Restrepo', role:'Creative Director, Flux', text:'Finally someone who truly understands both design and development. The final result was exactly what I imagined, but executed even more flawlessly than I had hoped. Absolutely incredible work.', avatar:'SR', accent:'#F43F5E' },
+  { name:'Valentina Torres', role:'CEO, Startup Nexus', text:'She completely transformed our vision into a digital product that exceeded every expectation. The combination of design sensibility and technical execution is truly exceptional. I wouldn\'t work with anyone else.', textEs:'Transformó por completo nuestra visión en un producto digital que superó todas las expectativas. La combinación de diseño y código es verdaderamente excepcional. No volvería a trabajar con nadie más.', avatar:'VT', accent:'#8B5CF6' },
+  { name:'Carlos Mendoza', role:'CTO, Aura Health', text:'The attention to detail and speed of delivery are unmatched. Every pixel is exactly where it should be. She shipped in record time without sacrificing a single millimeter of quality.', textEs:'El nivel de detalle en la implementación y la velocidad de entrega son incomparables. Cada pixel está donde debe estar. Entregó en tiempo récord sin sacrificar ni un milímetro de calidad.', avatar:'CM', accent:'#06B6D4' },
+  { name:'Sofía Restrepo', role:'Creative Director, Flux', roleEs:'Directora Creativa, Flux', text:'Finally someone who truly understands both design and development. The final result was exactly what I imagined, but executed even more flawlessly than I had hoped. Absolutely incredible work.', textEs:'Finalmente alguien que de verdad entiende diseño y desarrollo. El resultado final fue exactamente lo que imaginé, pero ejecutado de forma aún más impecable de lo que esperaba. Increíble.', avatar:'SR', accent:'#F43F5E' },
 ];
 
 /* ─────────────────────────────────────────
    NAVBAR
 ───────────────────────────────────────── */
-const Navbar = ({ dark, setDark, view, setView, goTo }) => {
+const Navbar = ({ dark, setDark, lang, setLang, view, setView, goTo }) => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const t = k => TEXTS[lang][k];
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 24);
@@ -167,9 +238,9 @@ const Navbar = ({ dark, setDark, view, setView, goTo }) => {
   }, []);
 
   const links = [
-    { label:'About', id:'about' },
-    { label:'Services', id:'services' },
-    { label:'Work', id:'works' },
+    { label: t('navAbout'), id:'about' },
+    { label: t('navServices'), id:'services' },
+    { label: t('navWork'), id:'works' },
   ];
 
   const base = `fixed top-0 left-0 right-0 z-50 transition-all duration-500`;
@@ -178,9 +249,20 @@ const Navbar = ({ dark, setDark, view, setView, goTo }) => {
            : 'bg-white/85 backdrop-blur-xl border-b border-black/[0.08]'
     : 'bg-transparent';
 
+  const LangToggle = ({ className='' }) => (
+    <button onClick={() => setLang(lang === 'en' ? 'es' : 'en')}
+      className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold border transition-all duration-300 ${
+        dark ? 'border-white/15 hover:border-white/30 hover:bg-white/5'
+             : 'border-black/15 hover:border-black/30 hover:bg-black/5'} ${className}`}>
+      <span className={lang === 'en' ? 'text-violet-500' : dark ? 'text-white/35' : 'text-black/35'}>EN</span>
+      <span className={dark ? 'text-white/20' : 'text-black/20'}>·</span>
+      <span className={lang === 'es' ? 'text-violet-500' : dark ? 'text-white/35' : 'text-black/35'}>ES</span>
+    </button>
+  );
+
   return (
     <nav className={`${base} ${bg}`}>
-      {/* Links centrados absolutamente respecto al viewport */}
+      {/* Links centrados */}
       <div className="absolute inset-0 h-[66px] hidden md:flex items-center justify-center pointer-events-none">
         <div className="flex items-center gap-8 pointer-events-auto">
           {view === 'home' ? links.map(l => (
@@ -191,7 +273,7 @@ const Navbar = ({ dark, setDark, view, setView, goTo }) => {
           )) : (
             <button onClick={() => setView('home')}
               className={`flex items-center gap-2 text-sm font-medium transition-all hover:text-violet-500 hover:-translate-x-0.5 ${dark ? 'text-white/60' : 'text-black/55'}`}>
-              <Icon name="arrowLeft" size={15}/> Back to home
+              <Icon name="arrowLeft" size={15}/> {t('navBack')}
             </button>
           )}
         </div>
@@ -199,13 +281,11 @@ const Navbar = ({ dark, setDark, view, setView, goTo }) => {
 
       {/* Logo + Controls */}
       <div className="relative max-w-7xl mx-auto px-6 h-[66px] flex items-center justify-between">
-        {/* Logo */}
         <button onClick={() => { setView('home'); window.scrollTo({ top:0, behavior:'smooth' }); }}
           className={`font-sans text-base font-semibold tracking-tight whitespace-nowrap transition-colors ${dark ? 'text-white hover:text-violet-400' : 'text-black hover:text-violet-600'}`}>
           adriana oquendo<span className="text-violet-500">.</span>
         </button>
 
-        {/* Controls */}
         <div className="flex items-center gap-2.5">
           <button onClick={() => setDark(!dark)}
             className={`w-9 h-9 rounded-full flex items-center justify-center border transition-all duration-300 ${
@@ -214,9 +294,11 @@ const Navbar = ({ dark, setDark, view, setView, goTo }) => {
             <Icon name={dark ? 'sun' : 'moon'} size={15}/>
           </button>
 
+          <LangToggle className="hidden md:flex"/>
+
           <button onClick={() => { if (view !== 'home') { setView('home'); setTimeout(() => goTo('contact'), 80); } else goTo('contact'); }}
             className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold bg-violet-600 text-white hover:bg-violet-500 transition-all hover:shadow-lg hover:shadow-violet-500/30">
-            Let's Talk <Icon name="arrowRight" size={14}/>
+            {t('navCta')} <Icon name="arrowRight" size={14}/>
           </button>
 
           <button onClick={() => setOpen(!open)} className={`md:hidden w-9 h-9 rounded-full flex items-center justify-center ${dark ? 'text-white' : 'text-black'}`}>
@@ -235,12 +317,15 @@ const Navbar = ({ dark, setDark, view, setView, goTo }) => {
           )) : (
             <button onClick={() => { setView('home'); setOpen(false); }}
               className={`flex items-center gap-2 text-sm font-medium hover:text-violet-500 ${dark ? 'text-white/60' : 'text-black/55'}`}>
-              <Icon name="arrowLeft" size={15}/> Back to home
+              <Icon name="arrowLeft" size={15}/> {t('navBack')}
             </button>
           )}
+          <div className="flex items-center gap-3">
+            <LangToggle/>
+          </div>
           <button onClick={() => { goTo('contact'); setOpen(false); }}
             className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-violet-600 text-white">
-            Let's Talk <Icon name="arrowRight" size={14}/>
+            {t('navCta')} <Icon name="arrowRight" size={14}/>
           </button>
         </div>
       )}
@@ -251,7 +336,7 @@ const Navbar = ({ dark, setDark, view, setView, goTo }) => {
 /* ─────────────────────────────────────────
    HERO
 ───────────────────────────────────────── */
-const Hero = ({ dark, setView, goTo }) => (
+const Hero = ({ dark, lang, setView, goTo }) => { const t = k => TEXTS[lang][k]; return (
   <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 pt-[66px]">
     {/* Grid bg */}
     <div className="absolute inset-0 pointer-events-none" style={{
@@ -273,7 +358,7 @@ const Hero = ({ dark, setView, goTo }) => (
       <div className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-full text-xs font-semibold mb-7 border anim-fade-up ${
         dark ? 'border-violet-500/25 bg-violet-500/10 text-violet-300' : 'border-violet-500/25 bg-violet-50 text-violet-700'}`}>
         <span className="w-1.5 h-1.5 rounded-full bg-green-400 dot-blink"/>
-        Available for new projects — 2026
+        {t('heroBadge')}
       </div>
 
       {/* Title */}
@@ -288,28 +373,28 @@ const Hero = ({ dark, setView, goTo }) => (
 
       {/* Subtitle */}
       <p className={`text-base md:text-lg max-w-xl mx-auto mb-9 leading-relaxed anim-fade-up-2 ${dark ? 'text-white/55' : 'text-black/55'}`}>
-        Product Maker based in Buenos Aires. I craft thoughtful digital experiences through UX/UI design, branding, and web development — where aesthetics meet solid systems.
+        {t('heroSub')}
       </p>
 
       {/* CTAs */}
       <div className="flex flex-wrap items-center justify-center gap-4 mb-14 anim-fade-up-3">
         <button onClick={() => goTo('works')}
           className="group flex items-center gap-3 px-9 py-4 rounded-full font-semibold text-white bg-violet-600 hover:bg-violet-500 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/40 hover:-translate-y-0.5">
-          View Work
+          {t('heroCta1')}
           <Icon name="arrowRight" size={18} className="group-hover:translate-x-1 transition-transform"/>
         </button>
         <button onClick={() => goTo('contact')}
           className={`group flex items-center gap-3 px-9 py-4 rounded-full font-semibold border transition-all duration-300 hover:-translate-y-0.5 ${
             dark ? 'border-white/20 text-white hover:bg-white/8 hover:border-white/35'
                  : 'border-black/20 text-black hover:bg-black/5 hover:border-black/35'}`}>
-          Let's Talk
+          {t('heroCta2')}
           <Icon name="mail" size={18} className="group-hover:scale-110 transition-transform"/>
         </button>
       </div>
 
     </div>
   </section>
-);
+); };
 
 /* ─────────────────────────────────────────
    LOGO CAROUSEL
@@ -338,7 +423,8 @@ const LogoCarousel = ({ dark }) => {
 /* ─────────────────────────────────────────
    ABOUT
 ───────────────────────────────────────── */
-const About = ({ dark }) => {
+const About = ({ dark, lang }) => {
+  const t = k => TEXTS[lang][k];
   const skills = ['UX/UI Design','Branding','Figma','React','Next.js','Tailwind CSS','TypeScript','Design Systems','AI Tools','Framer Motion','GSAP','Web Development'];
   return (
     <section id="about" className="py-32 px-6">
@@ -358,29 +444,29 @@ const About = ({ dark }) => {
           <div className={`absolute top-0 right-0 px-4 py-2.5 rounded-2xl border shadow-xl ${
             dark ? 'bg-black border-white/10 text-white' : 'bg-white border-black/8 text-black'}`}>
             <span className="font-display font-bold text-lg text-violet-500">5+</span>
-            <span className={`text-xs ml-1.5 ${dark ? 'text-white/50' : 'text-black/50'}`}>years exp.</span>
+            <span className={`text-xs ml-1.5 ${dark ? 'text-white/50' : 'text-black/50'}`}>{t('yearsLabel')}</span>
           </div>
-          {/* Badge bottom-left — dentro del padding */}
+          {/* Badge bottom-left */}
           <div className={`absolute bottom-0 left-0 px-4 py-2.5 rounded-2xl border shadow-xl ${
             dark ? 'bg-black border-white/10 text-white' : 'bg-white border-black/8 text-black'}`}>
             <span className="font-display font-bold text-lg text-cyan-500">40+</span>
-            <span className={`text-xs ml-1.5 ${dark ? 'text-white/50' : 'text-black/50'}`}>projects</span>
+            <span className={`text-xs ml-1.5 ${dark ? 'text-white/50' : 'text-black/50'}`}>{t('projectsLabel')}</span>
           </div>
         </div>
 
         {/* Bio */}
         <div>
-          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>About me</span>
+          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>{t('aboutLabel')}</span>
           <h2 className={`font-display text-5xl font-bold tracking-tight leading-none mb-8 ${dark ? 'text-white' : 'text-black'}`}>
-            Where aesthetics<br/>
-            <span className="text-violet-500">meet</span><br/>
-            strong systems.
+            {t('aboutH2')[0]}<br/>
+            <span className="text-violet-500">{t('aboutH2')[1]}</span><br/>
+            {t('aboutH2')[2]}
           </h2>
           <p className={`text-base leading-relaxed mb-5 ${dark ? 'text-white/55' : 'text-black/55'}`}>
-            I'm Adriana Oquendo, a passionate, creative, and detail-oriented Product Maker based in Buenos Aires. I express ideas through UX/UI design, branding, and web development — crafting digital experiences that balance aesthetics with functionality.
+            {t('aboutP1')}
           </p>
           <p className={`text-base leading-relaxed mb-10 ${dark ? 'text-white/55' : 'text-black/55'}`}>
-            Originally from Venezuela, I'm constantly learning, exploring new technologies, and leveraging AI-powered tools to build smarter workflows and more polished results — driven by curiosity, creativity, and meaningful collaboration.
+            {t('aboutP2')}
           </p>
           <div className="flex flex-wrap gap-2">
             {skills.map(s => (
@@ -399,19 +485,19 @@ const About = ({ dark }) => {
 /* ─────────────────────────────────────────
    SERVICES
 ───────────────────────────────────────── */
-const Services = ({ dark }) => (
+const Services = ({ dark, lang }) => { const t = k => TEXTS[lang][k]; return (
   <section id="services" className={`py-32 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
         <div>
-          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Services</span>
+          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>{t('servicesLabel')}</span>
           <h2 className={`font-display text-5xl font-bold tracking-tight leading-none ${dark ? 'text-white' : 'text-black'}`}>
-            What I can<br/>do for you.
+            {t('servicesH2')[0]}<br/>{t('servicesH2')[1]}
           </h2>
         </div>
         <div className="flex items-end">
           <p className={`text-base leading-relaxed ${dark ? 'text-white/45' : 'text-black/45'}`}>
-            Every service is designed to deliver measurable results, not just aesthetics. Quality and detail are non-negotiable.
+            {t('servicesSub')}
           </p>
         </div>
       </div>
@@ -426,12 +512,12 @@ const Services = ({ dark }) => (
               <Icon name={s.icon} size={20}/>
             </div>
             <h3 className={`font-display font-bold text-lg mb-3 transition-colors group-hover:text-violet-500 ${dark ? 'text-white' : 'text-black'}`}>
-              {s.title}
+              {lang === 'es' && s.titleEs ? s.titleEs : s.title}
             </h3>
-            <p className={`text-sm leading-relaxed mb-6 ${dark ? 'text-white/45' : 'text-black/45'}`}>{s.desc}</p>
+            <p className={`text-sm leading-relaxed mb-6 ${dark ? 'text-white/45' : 'text-black/45'}`}>{lang === 'es' && s.descEs ? s.descEs : s.desc}</p>
             <div className="flex flex-wrap gap-1.5">
-              {s.tags.map(t => (
-                <span key={t} className={`px-2 py-0.5 rounded text-xs font-medium ${dark ? 'bg-white/[0.05] text-white/35' : 'bg-black/[0.04] text-black/35'}`}>{t}</span>
+              {s.tags.map(tag => (
+                <span key={tag} className={`px-2 py-0.5 rounded text-xs font-medium ${dark ? 'bg-white/[0.05] text-white/35' : 'bg-black/[0.04] text-black/35'}`}>{tag}</span>
               ))}
             </div>
           </div>
@@ -439,12 +525,13 @@ const Services = ({ dark }) => (
       </div>
     </div>
   </section>
-);
+); };
 
 /* ─────────────────────────────────────────
    PROJECT CARD
 ───────────────────────────────────────── */
-const ProjectCard = ({ p, dark }) => {
+const ProjectCard = ({ p, dark, lang }) => {
+  const t = k => TEXTS[lang][k];
   const [hov, setHov] = useState(false);
   const [imgOk, setImgOk] = useState(true);
   const screenshotUrl = p.url
@@ -474,11 +561,11 @@ const ProjectCard = ({ p, dark }) => {
           {p.url ? (
             <a href={p.url} target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-full text-xs font-bold hover:bg-white/90 transition-colors">
-              <Icon name="eye" size={13}/> Visit site
+              <Icon name="eye" size={13}/> {t('visitSite')}
             </a>
           ) : (
             <button className="flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-full text-xs font-bold hover:bg-white/90 transition-colors">
-              <Icon name="eye" size={13}/> View demo
+              <Icon name="eye" size={13}/> {t('viewDemo')}
             </button>
           )}
         </div>
@@ -493,7 +580,7 @@ const ProjectCard = ({ p, dark }) => {
             {p.role || p.category}
           </span>
         </div>
-        <p className={`text-sm leading-relaxed mb-5 ${dark ? 'text-white/45' : 'text-black/45'}`}>{p.desc}</p>
+        <p className={`text-sm leading-relaxed mb-5 ${dark ? 'text-white/45' : 'text-black/45'}`}>{lang === 'es' && p.descEs ? p.descEs : p.desc}</p>
         <div className="flex flex-wrap gap-1.5">
           {p.tags.map(t => (
             <span key={t} className={`px-2.5 py-1 rounded-full text-xs font-medium border transition-colors group-hover:border-violet-500/30 ${
@@ -508,64 +595,64 @@ const ProjectCard = ({ p, dark }) => {
 /* ─────────────────────────────────────────
    FEATURED WORKS
 ───────────────────────────────────────── */
-const FeaturedWorks = ({ dark, setView }) => (
+const FeaturedWorks = ({ dark, lang, setView }) => { const t = k => TEXTS[lang][k]; return (
   <section id="works" className={`py-32 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
     <div className="max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
         <div>
-          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Selected Work</span>
+          <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>{t('worksLabel')}</span>
           <h2 className={`font-display text-5xl font-bold tracking-tight leading-none ${dark ? 'text-white' : 'text-black'}`}>
-            Featured<br/>projects.
+            {t('worksH2')[0]}<br/>{t('worksH2')[1]}
           </h2>
         </div>
         <p className={`text-sm max-w-xs leading-relaxed ${dark ? 'text-white/45' : 'text-black/45'}`}>
-          A curated selection of work that reflects my approach to design, development, and delivering real value.
+          {t('worksSub')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-        {FEATURED.map(p => <ProjectCard key={p.id} p={p} dark={dark}/>)}
+        {FEATURED.map(p => <ProjectCard key={p.id} p={p} dark={dark} lang={lang}/>)}
       </div>
 
       <div className="text-center">
         <button onClick={() => { setView('projects'); window.scrollTo({ top:0 }); }}
           className="group inline-flex items-center gap-3 px-9 py-4 rounded-full font-semibold border-2 border-violet-500 text-violet-500 hover:bg-violet-600 hover:text-white hover:border-violet-600 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/30 hover:-translate-y-0.5">
-          View all projects
+          {t('worksViewAll')}
           <Icon name="arrowRight" size={18} className="group-hover:translate-x-1 transition-transform"/>
         </button>
       </div>
     </div>
   </section>
-);
+); };
 
 /* ─────────────────────────────────────────
    TESTIMONIALS
 ───────────────────────────────────────── */
-const Testimonials = ({ dark }) => (
+const Testimonials = ({ dark, lang }) => { const tx = k => TEXTS[lang][k]; return (
   <section className={`py-32 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-16">
-        <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Testimonials</span>
+        <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>{tx('testimonialsLabel')}</span>
         <h2 className={`font-display text-5xl font-bold tracking-tight leading-none ${dark ? 'text-white' : 'text-black'}`}>
-          What my clients<br/><span className="text-violet-500">have to say.</span>
+          {tx('testimonialsH2')[0]}<br/><span className="text-violet-500">{tx('testimonialsH2')[1]}</span>
         </h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {TESTIMONIALS.map((t, i) => (
+        {TESTIMONIALS.map((tm, i) => (
           <div key={i} className={`group p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-1.5 hover:border-violet-500/25 ${
             dark ? 'border-white/[0.08] hover:bg-violet-500/[0.03]' : 'border-black/[0.08] hover:bg-violet-50/60'}`}>
             <div className="flex gap-1 mb-6">
               {[...Array(5)].map((_,j) => <StarFilled key={j} size={14} className="text-amber-400"/>)}
             </div>
-            <p className={`text-sm leading-relaxed mb-8 ${dark ? 'text-white/65' : 'text-black/65'}`}>"{t.text}"</p>
+            <p className={`text-sm leading-relaxed mb-8 ${dark ? 'text-white/65' : 'text-black/65'}`}>"{lang === 'es' && tm.textEs ? tm.textEs : tm.text}"</p>
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
-                style={{ background:`linear-gradient(135deg, ${t.accent}, ${t.accent}88)` }}>
-                {t.avatar}
+                style={{ background:`linear-gradient(135deg, ${tm.accent}, ${tm.accent}88)` }}>
+                {tm.avatar}
               </div>
               <div>
-                <div className={`text-sm font-semibold ${dark ? 'text-white' : 'text-black'}`}>{t.name}</div>
-                <div className={`text-xs mt-0.5 ${dark ? 'text-white/40' : 'text-black/40'}`}>{t.role}</div>
+                <div className={`text-sm font-semibold ${dark ? 'text-white' : 'text-black'}`}>{tm.name}</div>
+                <div className={`text-xs mt-0.5 ${dark ? 'text-white/40' : 'text-black/40'}`}>{lang === 'es' && tm.roleEs ? tm.roleEs : tm.role}</div>
               </div>
             </div>
           </div>
@@ -573,12 +660,13 @@ const Testimonials = ({ dark }) => (
       </div>
     </div>
   </section>
-);
+); };
 
 /* ─────────────────────────────────────────
    CONTACT
 ───────────────────────────────────────── */
-const Contact = ({ dark }) => {
+const Contact = ({ dark, lang }) => {
+  const t = k => TEXTS[lang][k];
   const [form, setForm] = useState({ name:'', email:'', message:'' });
   const [sent, setSent] = useState(false);
 
@@ -594,7 +682,7 @@ const Contact = ({ dark }) => {
 
   const contactItems = [
     { icon:'mail',   label:'Email',     val:'hola@adrianaoquendo.com' },
-    { icon:'mapPin', label:'Location', val:'Buenos Aires, Argentina' },
+    { icon:'mapPin', label: t('contactLoc'), val:'Buenos Aires, Argentina' },
     { icon:'globe',  label:'Web',       val:'adrianaoquendo.com' },
   ];
   const socials = [
@@ -609,12 +697,12 @@ const Contact = ({ dark }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           {/* Left info */}
           <div>
-            <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Contact</span>
+            <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>{t('contactLabel')}</span>
             <h2 className={`font-display text-5xl font-bold tracking-tight leading-none mb-7 ${dark ? 'text-white' : 'text-black'}`}>
-              Got a<br/><span className="text-violet-500">project</span><br/>in mind?
+              {t('contactH2')[0]}<br/><span className="text-violet-500">{t('contactH2')[1]}</span><br/>{t('contactH2')[2]}
             </h2>
             <p className={`text-base leading-relaxed mb-12 ${dark ? 'text-white/50' : 'text-black/50'}`}>
-              Let's talk about turning your vision into an exceptional digital product. I respond within 24 hours.
+              {t('contactSub')}
             </p>
             <div className="flex flex-col gap-5 mb-10">
               {contactItems.map(c => (
@@ -643,21 +731,21 @@ const Contact = ({ dark }) => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>Name</label>
-                <input type="text" placeholder="Your name" className={inp} value={form.name} onChange={e => setForm({...form, name:e.target.value})} required/>
+                <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>{t('fName')}</label>
+                <input type="text" placeholder={t('fNamePH')} className={inp} value={form.name} onChange={e => setForm({...form, name:e.target.value})} required/>
               </div>
               <div>
-                <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>Email</label>
-                <input type="email" placeholder="you@email.com" className={inp} value={form.email} onChange={e => setForm({...form, email:e.target.value})} required/>
+                <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>{t('fEmail')}</label>
+                <input type="email" placeholder={t('fEmailPH')} className={inp} value={form.email} onChange={e => setForm({...form, email:e.target.value})} required/>
               </div>
             </div>
             <div>
-              <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>Message</label>
-              <textarea placeholder="Tell me about your project, budget, and timeline..." rows={7} className={`${inp} resize-none`} value={form.message} onChange={e => setForm({...form, message:e.target.value})} required/>
+              <label className={`text-xs font-medium mb-2 block ${dark ? 'text-white/45' : 'text-black/45'}`}>{t('fMsg')}</label>
+              <textarea placeholder={t('fMsgPH')} rows={7} className={`${inp} resize-none`} value={form.message} onChange={e => setForm({...form, message:e.target.value})} required/>
             </div>
             <button type="submit" className={`group flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 ${
               sent ? 'bg-emerald-500' : 'bg-violet-600 hover:bg-violet-500 hover:shadow-xl hover:shadow-violet-500/30 hover:-translate-y-0.5'}`}>
-              {sent ? (<><Icon name="check" size={18}/> Message sent successfully!</>) : (<>Send message <Icon name="send" size={18} className="group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform"/></>)}
+              {sent ? (<><Icon name="check" size={18}/> {t('fSuccess')}</>) : (<>{t('fSubmit')} <Icon name="send" size={18} className="group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform"/></>)}
             </button>
           </form>
         </div>
@@ -669,29 +757,30 @@ const Contact = ({ dark }) => {
 /* ─────────────────────────────────────────
    FOOTER
 ───────────────────────────────────────── */
-const Footer = ({ dark }) => (
+const Footer = ({ dark, lang }) => { const t = k => TEXTS[lang][k]; return (
   <footer className={`py-10 px-6 border-t ${dark ? 'border-white/[0.08]' : 'border-black/[0.08]'}`}>
     <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
       <div className={`font-sans text-lg font-semibold ${dark ? 'text-white' : 'text-black'}`}>
         adriana oquendo<span className="text-violet-500">.</span>
       </div>
       <div className={`text-xs ${dark ? 'text-white/30' : 'text-black/30'}`}>
-        © 2026 Adriana Oquendo — Designed and built with precision
+        {t('footerCopy')}
       </div>
       <button onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}
         className={`text-xs font-medium transition-colors hover:text-violet-500 ${dark ? 'text-white/35' : 'text-black/35'}`}>
-        Back to top ↑
+        {t('footerBack')}
       </button>
     </div>
   </footer>
-);
+); };
 
 /* ─────────────────────────────────────────
    ALL PROJECTS PAGE
 ───────────────────────────────────────── */
-const AllProjects = ({ dark, setView }) => {
+const AllProjects = ({ dark, lang, setView }) => {
+  const t = k => TEXTS[lang][k];
   const [filter, setFilter] = useState('All');
-  const filters = ['All','Design','Development'];
+  const filterDefs = t('filterDefs');
   const shown = filter === 'All' ? ALL_PROJECTS : ALL_PROJECTS.filter(p => p.category === filter);
 
   return (
@@ -700,47 +789,47 @@ const AllProjects = ({ dark, setView }) => {
         {/* Back */}
         <button onClick={() => setView('home')}
           className={`inline-flex items-center gap-2 text-sm font-medium mb-10 transition-all hover:text-violet-500 hover:-translate-x-0.5 ${dark ? 'text-white/50' : 'text-black/50'}`}>
-          <Icon name="arrowLeft" size={15}/> Back to home
+          <Icon name="arrowLeft" size={15}/> {t('allBack')}
         </button>
 
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div>
-            <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>Full Portfolio</span>
+            <span className={`text-xs font-bold tracking-[0.22em] uppercase mb-5 block ${dark ? 'text-violet-400' : 'text-violet-600'}`}>{t('allLabel')}</span>
             <h1 className={`font-display font-bold tracking-tight leading-none ${dark ? 'text-white' : 'text-black'}`} style={{ fontSize:'clamp(2.8rem,7vw,6rem)' }}>
-              All<br/><span className="text-violet-500">projects.</span>
+              {t('allH2')[0]}<br/><span className="text-violet-500">{t('allH2')[1]}</span>
             </h1>
           </div>
           <p className={`text-base max-w-sm leading-relaxed ${dark ? 'text-white/45' : 'text-black/45'}`}>
-            {ALL_PROJECTS.length} projects that demonstrate my ability to solve complex problems with design and high-quality code.
+            {t('allSub')(ALL_PROJECTS.length)}
           </p>
         </div>
 
         {/* Filters */}
         <div className="flex items-center gap-3 mb-12 flex-wrap">
-          <span className={`text-xs font-medium ${dark ? 'text-white/30' : 'text-black/30'}`}>Filter by:</span>
-          {filters.map(f => (
-            <button key={f} onClick={() => setFilter(f)}
+          <span className={`text-xs font-medium ${dark ? 'text-white/30' : 'text-black/30'}`}>{t('allFilterBy')}</span>
+          {filterDefs.map(f => (
+            <button key={f.v} onClick={() => setFilter(f.v)}
               className={`px-5 py-2 rounded-full text-sm font-semibold border transition-all duration-200 ${
-                filter === f
+                filter === f.v
                   ? 'bg-violet-600 text-white border-violet-600 shadow-lg shadow-violet-500/25'
                   : dark
                     ? 'border-white/10 text-white/50 hover:border-violet-500/40 hover:text-violet-400'
                     : 'border-black/10 text-black/50 hover:border-violet-500/40 hover:text-violet-600'}`}>
-              {f}
-              {filter === f && <span className="ml-2 text-xs opacity-70">{shown.length}</span>}
+              {f.l}
+              {filter === f.v && <span className="ml-2 text-xs opacity-70">{shown.length}</span>}
             </button>
           ))}
         </div>
 
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {shown.map(p => <ProjectCard key={p.id} p={p} dark={dark}/>)}
+          {shown.map(p => <ProjectCard key={p.id} p={p} dark={dark} lang={lang}/>)}
         </div>
 
         {shown.length === 0 && (
           <div className={`text-center py-24 text-sm ${dark ? 'text-white/25' : 'text-black/25'}`}>
-            No projects in this category.
+            {t('allEmpty')}
           </div>
         )}
       </div>
@@ -751,16 +840,16 @@ const AllProjects = ({ dark, setView }) => {
 /* ─────────────────────────────────────────
    HOME
 ───────────────────────────────────────── */
-const Home = ({ dark, setView, goTo }) => (
+const Home = ({ dark, lang, setView, goTo }) => (
   <>
-    <Hero dark={dark} setView={setView} goTo={goTo}/>
+    <Hero dark={dark} lang={lang} setView={setView} goTo={goTo}/>
     <LogoCarousel dark={dark}/>
-    <About dark={dark}/>
-    <Services dark={dark}/>
-    <FeaturedWorks dark={dark} setView={setView}/>
-    <Testimonials dark={dark}/>
-    <Contact dark={dark}/>
-    <Footer dark={dark}/>
+    <About dark={dark} lang={lang}/>
+    <Services dark={dark} lang={lang}/>
+    <FeaturedWorks dark={dark} lang={lang} setView={setView}/>
+    <Testimonials dark={dark} lang={lang}/>
+    <Contact dark={dark} lang={lang}/>
+    <Footer dark={dark} lang={lang}/>
   </>
 );
 
@@ -769,6 +858,7 @@ const Home = ({ dark, setView, goTo }) => (
 ───────────────────────────────────────── */
 const App = () => {
   const [dark, setDark] = useState(true);
+  const [lang, setLang] = useState('en');
   const [view, setView] = useState('home');
 
   useEffect(() => {
@@ -785,10 +875,10 @@ const App = () => {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${dark ? 'bg-black text-white' : 'bg-white text-black'}`}>
-      <Navbar dark={dark} setDark={setDark} view={view} setView={setView} goTo={goTo}/>
+      <Navbar dark={dark} setDark={setDark} lang={lang} setLang={setLang} view={view} setView={setView} goTo={goTo}/>
       {view === 'home'
-        ? <Home dark={dark} setView={setView} goTo={goTo}/>
-        : <AllProjects dark={dark} setView={setView}/>}
+        ? <Home dark={dark} lang={lang} setView={setView} goTo={goTo}/>
+        : <AllProjects dark={dark} lang={lang} setView={setView}/>}
     </div>
   );
 };
